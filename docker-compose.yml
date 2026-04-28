@@ -1,0 +1,19 @@
+version: '3.8'
+
+services:
+  db:
+    build: .
+    container_name: centro_psicologico_db
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword  # Contraseña para el usuario root
+      MYSQL_DATABASE: dm_centro_psicologico  # Nombre de la base de datos
+    ports:
+      - "3306:3306"  # Mapea el puerto del contenedor al puerto local
+    volumes:
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql  # Monta tu archivo SQL de inicialización
+    networks:
+      - app_network
+
+networks:
+  app_network:
+    driver: bridge
