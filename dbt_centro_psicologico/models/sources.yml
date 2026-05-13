@@ -1,0 +1,11 @@
+version: 2
+
+sources:
+  - name: centro_raw
+    database: dm_centro_psicologico
+    schema: public
+    tables:
+      - name: oltp_pacientes
+      - name: oltp_psicologos
+      - name: oltp_sedes
+      - name: oltp_sesiones

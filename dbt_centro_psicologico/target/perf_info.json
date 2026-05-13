@@ -1,0 +1,51 @@
+{
+    "path_count": 145,
+    "parsed_path_count": 145,
+    "static_analysis_path_count": 11,
+    "static_analysis_parsed_path_count": 11,
+    "is_partial_parse_enabled": true,
+    "is_static_analysis_enabled": true,
+    "read_files_elapsed": 0.27926840000145603,
+    "load_macros_elapsed": 0.9338576000009198,
+    "parse_project_elapsed": 0.9925519000098575,
+    "patch_sources_elapsed": 0.043322799989255145,
+    "process_manifest_elapsed": 0.047311400005128235,
+    "load_all_elapsed": 2.4351152000017464,
+    "projects": [
+        {
+            "project_name": "dbt_centro_psicologico",
+            "elapsed": 0.9775444000115385,
+            "parsers": [
+                {
+                    "parser": "model",
+                    "elapsed": 0.4053363000130048,
+                    "parsed_path_count": 11
+                },
+                {
+                    "parser": "test",
+                    "elapsed": 0.5646716000046581,
+                    "parsed_path_count": 2
+                }
+            ],
+            "parsed_path_count": 13
+        },
+        {
+            "project_name": "dbt_postgres",
+            "elapsed": 0.008266399992862716,
+            "parsers": [],
+            "parsed_path_count": 0
+        },
+        {
+            "project_name": "dbt",
+            "elapsed": 0.006520799986901693,
+            "parsers": [
+                {
+                    "parser": "doc",
+                    "elapsed": 0.00035879999632015824,
+                    "parsed_path_count": 1
+                }
+            ],
+            "parsed_path_count": 1
+        }
+    ]
+}

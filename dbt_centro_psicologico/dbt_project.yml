@@ -1,0 +1,16 @@
+name: 'dbt_centro_psicologico'
+version: '1.0.0'
+config-version: 2
+
+profile: 'dbt_centro_psicologico'
+
+model-paths: ["models"]
+
+models:
+  dbt_centro_psicologico:
+    staging:
+      +schema: staging
+      +materialized: view
+    marts:
+      +schema: marts
+      +materialized: table

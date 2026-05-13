@@ -1,0 +1,118 @@
+version: 2
+
+models:
+  - name: dim_paciente
+    description: "Dimensión de pacientes del centro psicológico."
+    columns:
+      - name: paciente_key
+        tests:
+          - unique
+          - not_null
+
+  - name: dim_psicologo
+    description: "Dimensión de psicólogos del centro psicológico."
+    columns:
+      - name: psicologo_key
+        tests:
+          - unique
+          - not_null
+
+  - name: dim_sede
+    description: "Dimensión de sedes del centro psicológico."
+    columns:
+      - name: sede_key
+        tests:
+          - unique
+          - not_null
+
+  - name: dim_servicio
+    description: "Dimensión de servicios o características de atención psicológica."
+    columns:
+      - name: servicio_key
+        tests:
+          - unique
+          - not_null
+
+  - name: dim_tiempo
+    description: "Dimensión calendario basada en las fechas de sesiones."
+    columns:
+      - name: tiempo_key
+        tests:
+          - unique
+          - not_null
+
+  - name: fact_sesion
+    description: "Tabla de hechos de sesiones clínicas."
+    columns:
+      - name: sesion_key
+        tests:
+          - unique
+          - not_null
+
+      - name: paciente_key
+        tests:
+          - relationships:
+              to: ref('dim_paciente')
+              field: paciente_key
+
+      - name: psicologo_key
+        tests:
+          - relationships:
+              to: ref('dim_psicologo')
+              field: psicologo_key
+
+      - name: sede_key
+        tests:
+          - relationships:
+              to: ref('dim_sede')
+              field: sede_key
+
+      - name: tiempo_key
+        tests:
+          - relationships:
+              to: ref('dim_tiempo')
+              field: tiempo_key
+
+      - name: servicio_key
+        tests:
+          - relationships:
+              to: ref('dim_servicio')
+              field: servicio_key
+
+  - name: fact_facturacion
+    description: "Tabla de hechos de facturación generada desde las sesiones."
+    columns:
+      - name: facturacion_key
+        tests:
+          - unique
+          - not_null
+
+      - name: paciente_key
+        tests:
+          - relationships:
+              to: ref('dim_paciente')
+              field: paciente_key
+
+      - name: psicologo_key
+        tests:
+          - relationships:
+              to: ref('dim_psicologo')
+              field: psicologo_key
+
+      - name: sede_key
+        tests:
+          - relationships:
+              to: ref('dim_sede')
+              field: sede_key
+
+      - name: tiempo_key
+        tests:
+          - relationships:
+              to: ref('dim_tiempo')
+              field: tiempo_key
+
+      - name: servicio_key
+        tests:
+          - relationships:
+              to: ref('dim_servicio')
+              field: servicio_key
