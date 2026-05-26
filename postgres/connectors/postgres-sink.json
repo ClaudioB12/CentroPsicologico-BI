@@ -15,6 +15,7 @@
     "insert.mode": "upsert",
     "pk.mode": "record_key",
     "delete.enabled": "true",
+    "batch.size": "1000",
 
     "table.name.format": "raw.${topic}",
 

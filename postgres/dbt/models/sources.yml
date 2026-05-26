@@ -1,0 +1,16 @@
+version: 2
+
+sources:
+  - name: raw
+    schema: raw
+    description: "Tablas OLTP replicadas desde MySQL via CDC (Debezium -> Kafka -> JDBC Sink)"
+    tables:
+      - name: sedes
+      - name: psicologos
+      - name: pacientes
+      - name: historia_clinica
+      - name: sesiones
+      - name: evaluacion_psicologica
+      - name: diagnosticos
+      - name: plan_intervencion
+      - name: pagos

@@ -1,56 +1,33 @@
 version: '3.9'
 
 # ═══════════════════════════════════════════════════════════════════
-#  Pipeline CDC + dbt — Centro Psicológico Integral Guevara
+#  CONTENEDOR POSTGRES — Pipeline CDC + dbt (destino BI)
+#
+#  REQUISITO: el contenedor mysql/ debe estar corriendo primero.
+#             (crea la red cdc_network que este archivo usa)
 #
 #  FLUJO:
-#  MySQL (OLTP) ──Debezium──► Kafka ──JDBC Sink──► PostgreSQL raw
-#                                                        │
-#                                                      dbt run
-#                                                        │
-#                                                  PostgreSQL datamart
+#  PostgreSQL raw ◄── Kafka Connect ◄── Kafka ◄── Debezium ◄── MySQL
+#       │
+#     dbt run
+#       │
+#  PostgreSQL datamart
+#
+#  INICIAR:   docker compose up -d
+#  DETENER:   docker compose down
+#  RESET:     docker compose down -v
 #
 #  PUERTOS:
-#    3306  → MySQL          (fuente OLTP)
-#    5432  → PostgreSQL     (destino BI)
-#    9092  → Kafka          (broker de mensajes)
-#    8083  → Kafka Connect  (API REST de conectores)
-#    8080  → Kafka UI       (monitoreo visual)
-#    5050  → pgAdmin        (interfaz visual PostgreSQL)
+#    5432  → PostgreSQL
+#    9092  → Kafka
+#    8083  → Kafka Connect
+#    8080  → Kafka UI
+#    5050  → pgAdmin
 # ═══════════════════════════════════════════════════════════════════
 
 services:
 
-  # ── ETAPA 1: FUENTE — MySQL con binlog ROW habilitado ───────────
-  db:
-    image: mysql:8.0
-    container_name: centro_psicologico_db
-    command: >
-      --default-authentication-plugin=mysql_native_password
-      --log-bin=mysql-bin
-      --binlog-format=ROW
-      --binlog-row-image=FULL
-      --server-id=1
-      --expire-logs-days=3
-    environment:
-      MYSQL_ROOT_PASSWORD: rootpassword
-      MYSQL_DATABASE: dm_centro_psicologico
-    ports:
-      - "3306:3306"
-    volumes:
-      - ./init.sql:/docker-entrypoint-initdb.d/01-init.sql
-      - ./init-debezium.sql:/docker-entrypoint-initdb.d/02-debezium.sql
-      - mysql_data:/var/lib/mysql
-    networks:
-      - cdc_network
-    healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-prootpassword"]
-      interval: 10s
-      timeout: 5s
-      retries: 10
-      start_period: 30s
-
-  # ── ETAPA 4: DESTINO — PostgreSQL (raw + datamart) ──────────────
+  # ── DESTINO — PostgreSQL (raw + datamart) ───────────────────────
   postgres:
     image: postgres:15
     container_name: centro_psicologico_postgres
@@ -64,14 +41,16 @@ services:
       - ./init-postgres.sql:/docker-entrypoint-initdb.d/01-init.sql
       - postgres_data:/var/lib/postgresql/data
     networks:
-      - cdc_network
+      cdc_network:
+        aliases:
+          - postgres
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 10s
       timeout: 5s
       retries: 10
 
-  # ── ETAPA 2A: INFRAESTRUCTURA — Zookeeper ───────────────────────
+  # ── INFRAESTRUCTURA — Zookeeper ──────────────────────────────────
   zookeeper:
     image: confluentinc/cp-zookeeper:7.5.0
     container_name: zookeeper
@@ -90,7 +69,7 @@ services:
       retries: 10
       start_period: 15s
 
-  # ── ETAPA 2B: BROKER — Kafka ─────────────────────────────────────
+  # ── BROKER — Kafka ───────────────────────────────────────────────
   kafka:
     image: confluentinc/cp-kafka:7.5.0
     container_name: kafka
@@ -119,14 +98,12 @@ services:
       retries: 10
       start_period: 30s
 
-  # ── ETAPA 3: CDC — Kafka Connect (Debezium source + JDBC sink) ──
+  # ── CDC — Kafka Connect (Debezium source + JDBC sink) ────────────
   kafka-connect:
     build: ./kafka-connect
     container_name: kafka_connect
     depends_on:
       kafka:
-        condition: service_healthy
-      db:
         condition: service_healthy
       postgres:
         condition: service_healthy
@@ -157,7 +134,7 @@ services:
       retries: 20
       start_period: 90s
 
-  # ── REGISTRO AUTOMÁTICO: registra conectores al iniciar ─────────
+  # ── REGISTRO AUTOMÁTICO DE CONECTORES ───────────────────────────
   connector-init:
     image: curlimages/curl:latest
     container_name: connector_init
@@ -172,7 +149,7 @@ services:
       - cdc_network
     restart: "no"
 
-  # ── TRANSFORMACIÓN: dbt — crea datamart desde raw ───────────────
+  # ── TRANSFORMACIÓN — dbt ─────────────────────────────────────────
   dbt:
     build: ./dbt
     container_name: centro_psicologico_dbt
@@ -187,7 +164,7 @@ services:
       - cdc_network
     restart: "no"
 
-  # ── MONITOREO: Kafka UI ──────────────────────────────────────────
+  # ── MONITOREO — Kafka UI ─────────────────────────────────────────
   kafka-ui:
     image: provectuslabs/kafka-ui:latest
     container_name: kafka_ui
@@ -204,7 +181,7 @@ services:
     networks:
       - cdc_network
 
-  # ── MONITOREO: pgAdmin ───────────────────────────────────────────
+  # ── MONITOREO — pgAdmin ──────────────────────────────────────────
   pgadmin:
     image: dpage/pgadmin4:latest
     container_name: pgadmin
@@ -220,16 +197,14 @@ services:
     networks:
       - cdc_network
 
-# ── VOLÚMENES PERSISTENTES ──────────────────────────────────────────
 volumes:
-  mysql_data:
   postgres_data:
   zookeeper_data:
   zookeeper_logs:
   kafka_data:
   pgadmin_data:
 
-# ── RED INTERNA CDC ─────────────────────────────────────────────────
 networks:
   cdc_network:
-    driver: bridge
+    external: true
+    name: cdc_network

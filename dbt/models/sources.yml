@@ -1,0 +1,123 @@
+version: 2
+
+sources:
+  - name: raw
+    schema: raw
+    description: "Tablas OLTP replicadas desde MySQL via CDC (Debezium -> Kafka -> JDBC Sink)"
+    tables:
+      - name: sedes
+        description: "Sedes fisicas y online del centro"
+        columns:
+          - name: sede_id
+          - name: nombre_sede
+          - name: ciudad
+          - name: tiene_online
+          - name: estado
+
+      - name: psicologos
+        description: "Equipo terapeutico registrado"
+        columns:
+          - name: psicologo_id
+          - name: dni
+          - name: nombres
+          - name: especialidad
+          - name: cpp
+          - name: modalidad
+          - name: sede_id
+          - name: estado
+
+      - name: pacientes
+        description: "Registro de pacientes del centro"
+        columns:
+          - name: paciente_id
+          - name: nombres
+          - name: apellido_paterno
+          - name: apellido_materno
+          - name: tipo_documento
+          - name: numero_documento
+          - name: fecha_nacimiento
+          - name: sexo
+          - name: estado_civil
+          - name: grado_instruccion
+          - name: ocupacion
+          - name: celular
+          - name: email
+          - name: direccion
+          - name: fecha_registro
+          - name: canal_captacion
+          - name: estado_paciente
+          - name: modalidad_preferida
+          - name: sede_id
+
+      - name: historia_clinica
+        description: "Historia clinica por paciente"
+        columns:
+          - name: historia_id
+          - name: paciente_id
+          - name: codigo_historia
+          - name: tipo_historial
+          - name: fecha_apertura
+          - name: observaciones_generales
+          - name: estado_historia
+
+      - name: sesiones
+        description: "Sesiones clinicas realizadas"
+        columns:
+          - name: sesion_id
+          - name: historia_id
+          - name: psicologo_id
+          - name: fecha_sesion
+          - name: hora_sesion
+          - name: nro_sesion
+          - name: etapa_atencion
+          - name: modalidad
+          - name: duracion_min
+          - name: motivo_consulta
+          - name: observaciones
+          - name: estado_sesion
+
+      - name: evaluacion_psicologica
+        description: "Evaluaciones psicologicas aplicadas en sesion"
+        columns:
+          - name: evaluacion_id
+          - name: sesion_id
+          - name: metodos_aplicados
+          - name: resultados
+          - name: puntaje_cdi
+          - name: puntaje_stai
+          - name: observaciones
+          - name: fecha_evaluacion
+
+      - name: diagnosticos
+        description: "Diagnosticos CIE-10 por sesion"
+        columns:
+          - name: diagnostico_id
+          - name: sesion_id
+          - name: codigo_cie10
+          - name: descripcion_cie10
+          - name: diagnostico_clinico
+          - name: observaciones
+
+      - name: plan_intervencion
+        description: "Planes de intervencion terapeutica"
+        columns:
+          - name: plan_id
+          - name: sesion_id
+          - name: objetivos
+          - name: intervenciones
+          - name: recomendaciones
+          - name: fecha_inicio
+          - name: fecha_fin
+          - name: estado_plan
+
+      - name: pagos
+        description: "Pagos registrados por sesion"
+        columns:
+          - name: pago_id
+          - name: sesion_id
+          - name: fecha_pago
+          - name: monto
+          - name: comprobante
+          - name: metodo_pago
+          - name: estado_pago
+          - name: observaciones

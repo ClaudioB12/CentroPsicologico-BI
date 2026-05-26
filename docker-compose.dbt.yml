@@ -1,0 +1,39 @@
+name: dbt
+
+# ═══════════════════════════════════════════════════════════════════
+#  CONTENEDOR 4 — dbt (transformaciones SQL)
+#
+#  REQUISITOS (levantar en este orden):
+#    1. docker-compose.oltp.yml     → MySQL  (crea la red cdc_network)
+#    2. docker-compose.postgres.yml → PostgreSQL
+#    3. docker-compose.pipeline.yml → Kafka + CDC (connector-init debe completar)
+#    4. docker-compose.dbt.yml      → este archivo
+#
+#  FLUJO:
+#  PostgreSQL raw ──dbt run──► PostgreSQL staging ──► PostgreSQL datamart
+#
+#  INICIAR:
+#    docker compose -f docker-compose.dbt.yml up -d
+#
+#  RE-EJECUTAR dbt manualmente:
+#    docker compose -f docker-compose.dbt.yml restart dbt
+#
+#  VER LOGS:
+#    docker compose -f docker-compose.dbt.yml logs -f dbt
+# ═══════════════════════════════════════════════════════════════════
+
+services:
+
+  dbt:
+    build: ./dbt
+    container_name: centro_psicologico_dbt
+    volumes:
+      - ./dbt:/dbt
+    networks:
+      - cdc_network
+    restart: "no"
+
+networks:
+  cdc_network:
+    external: true
+    name: cdc_network

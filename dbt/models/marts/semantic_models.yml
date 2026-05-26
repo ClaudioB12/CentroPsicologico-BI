@@ -1,0 +1,246 @@
+version: 2
+
+# ═══════════════════════════════════════════════════════════════════
+#  MODELO SEMÁNTICO — Centro Psicológico Integral Guevara
+#
+#  Define entidades, dimensiones y medidas base para MetricFlow.
+#  Los modelos semánticos son la capa entre el datamart y las métricas.
+#
+#  MODELOS:
+#    sm_sesiones      → fact_sesion      (grain: 1 fila por sesión)
+#    sm_facturacion   → fact_facturacion (grain: 1 fila por pago)
+#    sm_evaluaciones  → fact_evaluacion  (grain: 1 fila por evaluación)
+# ═══════════════════════════════════════════════════════════════════
+
+semantic_models:
+
+  # ── SESIONES ──────────────────────────────────────────────────────
+  - name: sm_sesiones
+    description: >
+      Modelo semántico sobre fact_sesion. Cada fila es una sesión clínica.
+      Permite analizar asistencia, etapas terapéuticas y productividad
+      por psicólogo, sede, paciente y período de tiempo.
+    model: ref('fact_sesion')
+
+    entities:
+      - name: sesion
+        type: primary
+        expr: sesion_id
+
+      - name: paciente
+        type: foreign
+        expr: paciente_id
+
+      - name: psicologo
+        type: foreign
+        expr: psicologo_id
+
+      - name: sede
+        type: foreign
+        expr: sede_id
+
+      - name: historia
+        type: foreign
+        expr: historia_id
+
+    dimensions:
+      - name: fecha_sesion
+        type: time
+        type_params:
+          time_granularity: day
+        expr: fecha_sesion
+
+      - name: tipo_historial
+        type: categorical
+        description: "INDIVIDUAL o PAREJA"
+
+      - name: etapa_atencion
+        type: categorical
+        description: "MOTIVO_CONSULTA, EVALUACION, ANAMNESIS, TRATAMIENTO, SEGUIMIENTO, CIERRE"
+
+      - name: modalidad
+        type: categorical
+        description: "PRESENCIAL, ONLINE, HIBRIDA"
+
+      - name: estado_sesion
+        type: categorical
+        description: "REALIZADA, CANCELADA, NO_SHOW"
+
+    measures:
+      - name: total_sesiones
+        description: "Número total de sesiones registradas"
+        agg: count
+        expr: sesion_id
+
+      - name: sesiones_realizadas
+        description: "Sesiones efectivamente realizadas"
+        agg: sum
+        expr: flag_realizada
+
+      - name: sesiones_canceladas
+        description: "Sesiones canceladas por el paciente o el centro"
+        agg: sum
+        expr: flag_cancelada
+
+      - name: sesiones_noshow
+        description: "Sesiones donde el paciente no se presentó"
+        agg: sum
+        expr: flag_noshow
+
+      - name: primeras_sesiones
+        description: "Primera sesión por historia clínica (nuevos ingresos)"
+        agg: sum
+        expr: flag_primera_sesion
+
+      - name: duracion_total_min
+        description: "Suma total de minutos de sesión realizados"
+        agg: sum
+        expr: duracion_min
+
+      - name: duracion_promedio_min
+        description: "Duración promedio de sesión en minutos"
+        agg: average
+        expr: duracion_min
+
+      - name: pacientes_unicos
+        description: "Cantidad de pacientes distintos atendidos"
+        agg: count_distinct
+        expr: paciente_id
+
+
+  # ── FACTURACIÓN ───────────────────────────────────────────────────
+  - name: sm_facturacion
+    description: >
+      Modelo semántico sobre fact_facturacion. Cada fila es un pago registrado
+      (solo estado PAGADO). Permite analizar ingresos por sede, psicólogo,
+      método de pago y período.
+    model: ref('fact_facturacion')
+
+    entities:
+      - name: pago
+        type: primary
+        expr: pago_id
+
+      - name: sesion
+        type: foreign
+        expr: sesion_id
+
+      - name: paciente
+        type: foreign
+        expr: paciente_id
+
+      - name: psicologo
+        type: foreign
+        expr: psicologo_id
+
+      - name: sede
+        type: foreign
+        expr: sede_id
+
+    dimensions:
+      - name: fecha_pago
+        type: time
+        type_params:
+          time_granularity: day
+        expr: fecha_pago
+
+      - name: metodo_pago
+        type: categorical
+        description: "EFECTIVO, YAPE, TRANSFERENCIA, TARJETA, PLIN"
+
+      - name: estado_pago
+        type: categorical
+        description: "PAGADO, PENDIENTE, EXONERADO"
+
+    measures:
+      - name: ingresos_totales
+        description: "Suma total de montos cobrados (solo pagos PAGADO)"
+        agg: sum
+        expr: monto_cobrado
+
+      - name: total_pagos
+        description: "Número total de pagos registrados"
+        agg: count
+        expr: pago_id
+
+      - name: ingreso_promedio
+        description: "Monto promedio por pago"
+        agg: average
+        expr: monto_cobrado
+
+      - name: ingreso_maximo
+        description: "Pago máximo registrado"
+        agg: max
+        expr: monto_cobrado
+
+      - name: ingreso_minimo
+        description: "Pago mínimo registrado"
+        agg: min
+        expr: monto_cobrado
+
+
+  # ── EVALUACIONES PSICOLÓGICAS ─────────────────────────────────────
+  - name: sm_evaluaciones
+    description: >
+      Modelo semántico sobre fact_evaluacion. Cada fila es una evaluación
+      psicológica aplicada. Permite analizar niveles de depresión (CDI)
+      y ansiedad (STAI) por paciente, psicólogo y período.
+    model: ref('fact_evaluacion')
+
+    entities:
+      - name: evaluacion
+        type: primary
+        expr: evaluacion_id
+
+      - name: sesion
+        type: foreign
+        expr: sesion_id
+
+      - name: paciente
+        type: foreign
+        expr: paciente_id
+
+      - name: psicologo
+        type: foreign
+        expr: psicologo_id
+
+    dimensions:
+      - name: fecha_evaluacion
+        type: time
+        type_params:
+          time_granularity: day
+        expr: fecha_evaluacion
+
+      - name: nivel_depresion
+        type: categorical
+        description: "NORMAL, LEVE, MODERADO, SEVERO — basado en puntaje CDI"
+
+      - name: nivel_ansiedad
+        type: categorical
+        description: "BAJO, MODERADO, ALTO — basado en puntaje STAI"
+
+    measures:
+      - name: total_evaluaciones
+        description: "Número total de evaluaciones psicológicas aplicadas"
+        agg: count
+        expr: evaluacion_id
+
+      - name: suma_puntaje_cdi
+        description: "Suma de puntajes CDI (depresión)"
+        agg: sum
+        expr: puntaje_cdi
+
+      - name: suma_puntaje_stai
+        description: "Suma de puntajes STAI (ansiedad)"
+        agg: sum
+        expr: puntaje_stai
+
+      - name: promedio_puntaje_cdi
+        description: "Puntaje CDI promedio (escala depresión)"
+        agg: average
+        expr: puntaje_cdi
+
+      - name: promedio_puntaje_stai
+        description: "Puntaje STAI promedio (escala ansiedad)"
+        agg: average
+        expr: puntaje_stai
