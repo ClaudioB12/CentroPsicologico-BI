@@ -1,0 +1,21 @@
+select
+    paciente_id,
+    nombres,
+    apellido_paterno,
+    apellido_materno,
+    tipo_documento,
+    numero_documento,
+    (DATE '1970-01-01' + fecha_nacimiento) as fecha_nacimiento,
+    sexo,
+    estado_civil,
+    grado_instruccion,
+    ocupacion,
+    celular,
+    email,
+    direccion,
+    (DATE '1970-01-01' + fecha_registro) as fecha_registro,
+    canal_captacion,
+    estado_paciente,
+    modalidad_preferida,
+    sede_id
+from "dm_centro_psicologico"."raw"."pacientes"
