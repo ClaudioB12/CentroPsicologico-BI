@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+    <url>
+         <loc>https://claudiob12.github.io/CentroPsicologico-BI/</loc>
+         <lastmod>2026-06-23</lastmod>
+    </url>
+    <url>
+         <loc>https://claudiob12.github.io/CentroPsicologico-BI/EVIDENCIA_PENDIENTE/</loc>
+         <lastmod>2026-06-23</lastmod>
+    </url>
+    <url>
+         <loc>https://claudiob12.github.io/CentroPsicologico-BI/informe_tecnico/</loc>
+         <lastmod>2026-06-23</lastmod>
+    </url>
+    <url>
+         <loc>https://claudiob12.github.io/CentroPsicologico-BI/diagrams/arquitectura/</loc>
+         <lastmod>2026-06-23</lastmod>
+    </url>
+    <url>
+         <loc>https://claudiob12.github.io/CentroPsicologico-BI/diagrams/lineaje_dbt/</loc>
+         <lastmod>2026-06-23</lastmod>
+    </url>
+    <url>
+         <loc>https://claudiob12.github.io/CentroPsicologico-BI/diagrams/modelo_dimensional/</loc>
+         <lastmod>2026-06-23</lastmod>
+    </url>
+    <url>
+         <loc>https://claudiob12.github.io/CentroPsicologico-BI/diagrams/oltp_schema/</loc>
+         <lastmod>2026-06-23</lastmod>
+    </url>
+</urlset>
