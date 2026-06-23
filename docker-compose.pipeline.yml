@@ -1,0 +1,160 @@
+version: '3.9'
+
+# ═══════════════════════════════════════════════════════════════════
+#  CONTENEDOR 2 — Pipeline CDC + dbt (Kafka, Debezium, dbt)
+#
+#  REQUISITOS (levantar en este orden):
+#    1. docker-compose.oltp.yml     → MySQL  (crea la red cdc_network)
+#    2. docker-compose.postgres.yml → PostgreSQL
+#    3. docker-compose.pipeline.yml → este archivo
+#
+#  FLUJO INTERNO:
+#  MySQL ──Debezium──► Kafka ──JDBC Sink──► PostgreSQL raw
+#                                                │
+#                                             dbt run
+#                                                │
+#                                        PostgreSQL datamart
+#
+#  INICIAR:
+#    docker compose -f docker-compose.pipeline.yml up -d
+#
+#  DETENER (conservando datos):
+#    docker compose -f docker-compose.pipeline.yml down
+#
+#  DETENER (borrando datos):
+#    docker compose -f docker-compose.pipeline.yml down -v
+#
+#  PUERTOS:
+#    9092  → Kafka
+#    8083  → Kafka Connect
+#    8080  → Kafka UI
+# ═══════════════════════════════════════════════════════════════════
+
+services:
+
+  # ── INFRAESTRUCTURA — Zookeeper ──────────────────────────────────
+  zookeeper:
+    image: confluentinc/cp-zookeeper:7.5.0
+    container_name: zookeeper
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+    volumes:
+      - zookeeper_data:/var/lib/zookeeper/data
+      - zookeeper_logs:/var/lib/zookeeper/log
+    networks:
+      - cdc_network
+    healthcheck:
+      test: ["CMD-SHELL", "timeout 5 /usr/bin/zookeeper-shell localhost:2181 ls / 2>&1 | grep -q zookeeper"]
+      interval: 10s
+      timeout: 8s
+      retries: 10
+      start_period: 15s
+
+  # ── BROKER — Kafka ───────────────────────────────────────────────
+  kafka:
+    image: confluentinc/cp-kafka:7.5.0
+    container_name: kafka
+    depends_on:
+      zookeeper:
+        condition: service_healthy
+    ports:
+      - "9092:9092"
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:29092,PLAINTEXT_HOST://localhost:9092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
+      KAFKA_LOG_RETENTION_HOURS: 168
+    volumes:
+      - kafka_data:/var/lib/kafka/data
+    networks:
+      - cdc_network
+    healthcheck:
+      test: kafka-broker-api-versions --bootstrap-server localhost:9092
+      interval: 15s
+      timeout: 10s
+      retries: 10
+      start_period: 30s
+
+  # ── CDC — Kafka Connect (Debezium source + JDBC sink) ────────────
+  # NOTA: db (MySQL) está en docker-compose.oltp.yml
+  #       postgres    está en docker-compose.postgres.yml
+  # Debezium y JDBC Sink reintentan la conexión automáticamente.
+  kafka-connect:
+    build: ./kafka-connect
+    container_name: kafka_connect
+    depends_on:
+      kafka:
+        condition: service_healthy
+    ports:
+      - "8083:8083"
+    environment:
+      CONNECT_BOOTSTRAP_SERVERS: kafka:29092
+      CONNECT_REST_PORT: 8083
+      CONNECT_REST_ADVERTISED_HOST_NAME: kafka-connect
+      CONNECT_GROUP_ID: centro-connect-cluster
+      CONNECT_CONFIG_STORAGE_TOPIC: _connect_configs
+      CONNECT_OFFSET_STORAGE_TOPIC: _connect_offsets
+      CONNECT_STATUS_STORAGE_TOPIC: _connect_statuses
+      CONNECT_CONFIG_STORAGE_REPLICATION_FACTOR: "1"
+      CONNECT_OFFSET_STORAGE_REPLICATION_FACTOR: "1"
+      CONNECT_STATUS_STORAGE_REPLICATION_FACTOR: "1"
+      CONNECT_KEY_CONVERTER: org.apache.kafka.connect.json.JsonConverter
+      CONNECT_VALUE_CONVERTER: org.apache.kafka.connect.json.JsonConverter
+      CONNECT_PLUGIN_PATH: /usr/share/java,/usr/share/confluent-hub-components
+    volumes:
+      - ./connectors:/connectors
+    networks:
+      - cdc_network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8083/connectors"]
+      interval: 15s
+      timeout: 10s
+      retries: 20
+      start_period: 90s
+
+  # ── REGISTRO AUTOMÁTICO DE CONECTORES ───────────────────────────
+  connector-init:
+    image: curlimages/curl:latest
+    container_name: connector_init
+    depends_on:
+      kafka-connect:
+        condition: service_healthy
+    volumes:
+      - ./connectors:/connectors
+      - ./scripts:/scripts
+    command: ["/bin/sh", "/scripts/register-connectors.sh"]
+    networks:
+      - cdc_network
+    restart: "no"
+
+  # ── MONITOREO — Kafka UI ─────────────────────────────────────────
+  kafka-ui:
+    image: provectuslabs/kafka-ui:latest
+    container_name: kafka_ui
+    depends_on:
+      kafka:
+        condition: service_healthy
+    ports:
+      - "8080:8080"
+    environment:
+      KAFKA_CLUSTERS_0_NAME: CentroPsicologico-CDC
+      KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka:29092
+      KAFKA_CLUSTERS_0_KAFKACONNECT_0_NAME: debezium-connect
+      KAFKA_CLUSTERS_0_KAFKACONNECT_0_ADDRESS: http://kafka-connect:8083
+    networks:
+      - cdc_network
+
+volumes:
+  zookeeper_data:
+  zookeeper_logs:
+  kafka_data:
+
+networks:
+  cdc_network:
+    external: true
+    name: cdc_network

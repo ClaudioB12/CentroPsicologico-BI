@@ -1,0 +1,244 @@
+version: 2
+
+# ═══════════════════════════════════════════════════════════════════
+#  MÉTRICAS DE NEGOCIO — Centro Psicológico Integral Guevara
+#
+#  KPIs organizados en 4 áreas:
+#    1. Operacional  → asistencia, flujo de sesiones
+#    2. Financiero   → ingresos, facturación
+#    3. Clínico      → evaluaciones, niveles de salud mental
+#    4. Pacientes    → captación, retención
+# ═══════════════════════════════════════════════════════════════════
+
+metrics:
+
+  # ════════════════════════════════════════════════════════════════
+  #  ÁREA 1 — OPERACIONAL
+  # ════════════════════════════════════════════════════════════════
+
+  - name: total_sesiones
+    label: "Total de Sesiones"
+    description: "Número total de sesiones registradas en el período"
+    type: simple
+    type_params:
+      measure:
+        name: total_sesiones
+        fill_nulls_with: 0
+    meta:
+      area: operacional
+
+  - name: sesiones_realizadas
+    label: "Sesiones Realizadas"
+    description: "Sesiones efectivamente atendidas por el psicólogo"
+    type: simple
+    type_params:
+      measure:
+        name: sesiones_realizadas
+        fill_nulls_with: 0
+    meta:
+      area: operacional
+
+  - name: sesiones_canceladas
+    label: "Sesiones Canceladas"
+    description: "Sesiones canceladas antes de realizarse"
+    type: simple
+    type_params:
+      measure:
+        name: sesiones_canceladas
+        fill_nulls_with: 0
+    meta:
+      area: operacional
+
+  - name: sesiones_noshow
+    label: "Sesiones No-Show"
+    description: "Sesiones donde el paciente no se presentó sin avisar"
+    type: simple
+    type_params:
+      measure:
+        name: sesiones_noshow
+        fill_nulls_with: 0
+    meta:
+      area: operacional
+
+  - name: tasa_cancelacion
+    label: "Tasa de Cancelación (%)"
+    description: >
+      Porcentaje de sesiones canceladas sobre el total.
+      Alto valor indica problemas de adherencia o agenda.
+    type: ratio
+    type_params:
+      numerator:
+        name: sesiones_canceladas
+      denominator:
+        name: total_sesiones
+    meta:
+      area: operacional
+
+  - name: tasa_noshow
+    label: "Tasa de No-Show (%)"
+    description: >
+      Porcentaje de sesiones con ausencia sin aviso sobre el total.
+      Métrica clave de adherencia terapéutica.
+    type: ratio
+    type_params:
+      numerator:
+        name: sesiones_noshow
+      denominator:
+        name: total_sesiones
+    meta:
+      area: operacional
+
+  - name: tasa_ausentismo
+    label: "Tasa de Ausentismo (%)"
+    description: >
+      Porcentaje combinado de cancelaciones y no-shows.
+      (canceladas + no-show) / total
+    type: derived
+    type_params:
+      expr: "sesiones_canceladas + sesiones_noshow"
+      metrics:
+        - name: sesiones_canceladas
+        - name: sesiones_noshow
+    meta:
+      area: operacional
+
+  - name: nuevos_ingresos
+    label: "Nuevos Ingresos"
+    description: "Primeras sesiones del período — proxy de nuevos pacientes"
+    type: simple
+    type_params:
+      measure:
+        name: primeras_sesiones
+        fill_nulls_with: 0
+    meta:
+      area: operacional
+
+  - name: duracion_promedio_sesion
+    label: "Duración Promedio de Sesión (min)"
+    description: "Promedio de minutos por sesión realizada"
+    type: simple
+    type_params:
+      measure:
+        name: duracion_promedio_min
+    meta:
+      area: operacional
+
+  - name: pacientes_atendidos
+    label: "Pacientes Únicos Atendidos"
+    description: "Cantidad de pacientes distintos con al menos una sesión en el período"
+    type: simple
+    type_params:
+      measure:
+        name: pacientes_unicos
+        fill_nulls_with: 0
+    meta:
+      area: operacional
+
+
+  # ════════════════════════════════════════════════════════════════
+  #  ÁREA 2 — FINANCIERO
+  # ════════════════════════════════════════════════════════════════
+
+  - name: ingresos_totales
+    label: "Ingresos Totales (S/.)"
+    description: "Suma total de pagos cobrados en el período"
+    type: simple
+    type_params:
+      measure:
+        name: ingresos_totales
+        fill_nulls_with: 0
+    meta:
+      area: financiero
+
+  - name: ingreso_promedio_sesion
+    label: "Ingreso Promedio por Sesión (S/.)"
+    description: "Monto promedio cobrado por sesión pagada"
+    type: simple
+    type_params:
+      measure:
+        name: ingreso_promedio
+    meta:
+      area: financiero
+
+  - name: total_transacciones
+    label: "Total de Transacciones"
+    description: "Número de pagos procesados en el período"
+    type: simple
+    type_params:
+      measure:
+        name: total_pagos
+        fill_nulls_with: 0
+    meta:
+      area: financiero
+
+  - name: ingreso_por_sesion_realizada
+    label: "Ingreso por Sesión Realizada (S/.)"
+    description: >
+      Ingresos totales dividido entre sesiones realizadas.
+      Mide eficiencia de cobranza.
+    type: ratio
+    type_params:
+      numerator:
+        name: ingresos_totales
+      denominator:
+        name: sesiones_realizadas
+    meta:
+      area: financiero
+
+
+  # ════════════════════════════════════════════════════════════════
+  #  ÁREA 3 — CLÍNICO
+  # ════════════════════════════════════════════════════════════════
+
+  - name: total_evaluaciones
+    label: "Total de Evaluaciones"
+    description: "Número de evaluaciones psicológicas aplicadas en el período"
+    type: simple
+    type_params:
+      measure:
+        name: total_evaluaciones
+        fill_nulls_with: 0
+    meta:
+      area: clinico
+
+  - name: puntaje_cdi_promedio
+    label: "Puntaje CDI Promedio"
+    description: >
+      Promedio del Inventario de Depresión (CDI).
+      Interpretación: < 10 Normal, 10-19 Leve, 20-29 Moderado, ≥ 30 Severo.
+    type: simple
+    type_params:
+      measure:
+        name: promedio_puntaje_cdi
+    meta:
+      area: clinico
+      instrumento: CDI
+      umbral_alerta: 20
+
+  - name: puntaje_stai_promedio
+    label: "Puntaje STAI Promedio"
+    description: >
+      Promedio del Inventario de Ansiedad Estado-Rasgo (STAI).
+      Interpretación: < 40 Bajo, 40-59 Moderado, ≥ 60 Alto.
+    type: simple
+    type_params:
+      measure:
+        name: promedio_puntaje_stai
+    meta:
+      area: clinico
+      instrumento: STAI
+      umbral_alerta: 60
+
+  - name: cobertura_evaluacion
+    label: "Cobertura de Evaluación (%)"
+    description: >
+      Porcentaje de sesiones que tuvieron evaluación psicológica.
+      Mide adherencia al protocolo de evaluación del centro.
+    type: ratio
+    type_params:
+      numerator:
+        name: total_evaluaciones
+      denominator:
+        name: sesiones_realizadas
+    meta:
+      area: clinico

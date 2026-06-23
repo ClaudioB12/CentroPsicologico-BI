@@ -1,0 +1,27 @@
+# MkDocs build output
+site/
+
+# dbt compiled output y logs (no son evidencia, se regeneran)
+dbt/logs/
+dbt/target/run/
+dbt/target/compiled/
+dbt/target/graph.gpickle
+dbt/target/partial_parse.msgpack
+dbt/.user.yml
+postgres/dbt/logs/
+postgres/dbt/target/
+postgres/dbt/.user.yml
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+.env
+*.env
+
+# Sistema operativo
+.DS_Store
+Thumbs.db
+desktop.ini

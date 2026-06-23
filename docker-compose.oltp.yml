@@ -1,0 +1,55 @@
+version: '3.9'
+
+# ═══════════════════════════════════════════════════════════════════
+#  CONTENEDOR 1 — MySQL OLTP (fuente de datos)
+#
+#  Levanta solo la base de datos transaccional.
+#  El binlog ROW está habilitado para que Debezium pueda leerlo.
+#
+#  INICIAR:
+#    docker compose -f docker-compose.oltp.yml up -d
+#
+#  DETENER (conservando datos):
+#    docker compose -f docker-compose.oltp.yml down
+#
+#  DETENER (borrando datos):
+#    docker compose -f docker-compose.oltp.yml down -v
+# ═══════════════════════════════════════════════════════════════════
+
+services:
+
+  db:
+    image: mysql:8.0
+    container_name: centro_psicologico_db
+    command: >
+      --default-authentication-plugin=mysql_native_password
+      --log-bin=mysql-bin
+      --binlog-format=ROW
+      --binlog-row-image=FULL
+      --server-id=1
+      --expire-logs-days=3
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: dm_centro_psicologico
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./init.sql:/docker-entrypoint-initdb.d/01-init.sql
+      - ./init-debezium.sql:/docker-entrypoint-initdb.d/02-debezium.sql
+      - mysql_data:/var/lib/mysql
+    networks:
+      - cdc_network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-prootpassword"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+
+volumes:
+  mysql_data:
+
+networks:
+  cdc_network:
+    driver: bridge
+    name: cdc_network

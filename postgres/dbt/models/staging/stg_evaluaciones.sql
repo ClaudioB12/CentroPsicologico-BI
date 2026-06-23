@@ -1,0 +1,10 @@
+select
+    evaluacion_id,
+    sesion_id,
+    metodos_aplicados,
+    resultados,
+    coalesce(puntaje_cdi,  0)       as puntaje_cdi,
+    coalesce(puntaje_stai, 0)       as puntaje_stai,
+    observaciones,
+    (DATE '1970-01-01' + fecha_evaluacion * INTERVAL '1 day')::date as fecha_evaluacion
+from {{ source('raw', 'evaluacion_psicologica') }}

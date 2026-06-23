@@ -1,0 +1,13 @@
+centro_psicologico:
+  target: dev
+  outputs:
+    dev:
+      type: postgres
+      host: postgres
+      user: postgres
+      password: postgrespassword
+      port: 5432
+      dbname: dm_centro_psicologico
+      schema: dbt
+      threads: 1
+      connect_timeout: 10

@@ -1,0 +1,69 @@
+name: postgres
+
+# ═══════════════════════════════════════════════════════════════════
+#  CONTENEDOR 3 — PostgreSQL (destino BI) + pgAdmin
+#
+#  REQUISITO: docker-compose.oltp.yml debe estar corriendo primero
+#  (crea la red cdc_network).
+#
+#  INICIAR (después de levantar oltp):
+#    docker compose -f docker-compose.postgres.yml up -d
+#
+#  DETENER (conservando datos):
+#    docker compose -f docker-compose.postgres.yml down
+#
+#  DETENER (borrando datos):
+#    docker compose -f docker-compose.postgres.yml down -v
+#
+#  PUERTOS:
+#    5432  → PostgreSQL
+#    5050  → pgAdmin
+# ═══════════════════════════════════════════════════════════════════
+
+services:
+
+  # ── DESTINO — PostgreSQL (raw + datamart) ───────────────────────
+  postgres:
+    image: postgres:15
+    container_name: centro_psicologico_postgres
+    environment:
+      POSTGRES_PASSWORD: postgrespassword
+      POSTGRES_DB: dm_centro_psicologico
+      POSTGRES_USER: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./init-postgres.sql:/docker-entrypoint-initdb.d/01-init.sql
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - cdc_network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  # ── MONITOREO — pgAdmin ──────────────────────────────────────────
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: pgadmin
+    depends_on:
+      - postgres
+    ports:
+      - "5050:80"
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@centro.com
+      PGADMIN_DEFAULT_PASSWORD: adminpassword
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
+    networks:
+      - cdc_network
+
+volumes:
+  postgres_data:
+  pgadmin_data:
+
+networks:
+  cdc_network:
+    external: true
+    name: cdc_network

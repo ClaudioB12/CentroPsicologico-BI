@@ -1,0 +1,88 @@
+version: 2
+
+# ═══════════════════════════════════════════════════════════════════
+#  EXPOSURES — Consumidores del Datamart
+#
+#  Documenta qué herramientas y dashboards consumen los modelos dbt.
+#  Permite trazar linaje: fuente MySQL → raw → staging → datamart → BI
+# ═══════════════════════════════════════════════════════════════════
+
+exposures:
+
+  - name: dashboard_operacional
+    label: "Dashboard Operacional"
+    type: dashboard
+    maturity: high
+    description: >
+      Dashboard principal de operaciones clínicas.
+      Muestra asistencia, sesiones por psicólogo y flujo semanal.
+    owner:
+      name: Centro Psicológico Integral Guevara
+      email: guitarrapuno18@gmail.com
+    depends_on:
+      - ref('fact_sesion')
+      - ref('dim_psicologo')
+      - ref('dim_paciente')
+      - ref('dim_sede')
+      - ref('dim_tiempo')
+    tags:
+      - operacional
+      - sesiones
+
+  - name: dashboard_financiero
+    label: "Dashboard Financiero"
+    type: dashboard
+    maturity: high
+    description: >
+      Dashboard de ingresos y facturación.
+      Muestra ingresos por sede, psicólogo y método de pago.
+    owner:
+      name: Centro Psicológico Integral Guevara
+      email: guitarrapuno18@gmail.com
+    depends_on:
+      - ref('fact_facturacion')
+      - ref('dim_psicologo')
+      - ref('dim_sede')
+      - ref('dim_tiempo')
+    tags:
+      - financiero
+      - facturacion
+
+  - name: dashboard_clinico
+    label: "Dashboard Clínico"
+    type: dashboard
+    maturity: medium
+    description: >
+      Dashboard de indicadores clínicos.
+      Muestra niveles de depresión (CDI), ansiedad (STAI)
+      y diagnósticos CIE-10 por período.
+    owner:
+      name: Centro Psicológico Integral Guevara
+      email: guitarrapuno18@gmail.com
+    depends_on:
+      - ref('fact_evaluacion')
+      - ref('dim_diagnostico')
+      - ref('dim_paciente')
+      - ref('dim_psicologo')
+      - ref('dim_tiempo')
+    tags:
+      - clinico
+      - evaluaciones
+
+  - name: reporte_pacientes
+    label: "Reporte de Pacientes"
+    type: analysis
+    maturity: medium
+    description: >
+      Análisis de perfil de pacientes: captación por canal,
+      rango etario, modalidad preferida y estado terapéutico.
+    owner:
+      name: Centro Psicológico Integral Guevara
+      email: guitarrapuno18@gmail.com
+    depends_on:
+      - ref('dim_paciente')
+      - ref('fact_sesion')
+      - ref('fact_facturacion')
+    tags:
+      - pacientes
+      - captacion
