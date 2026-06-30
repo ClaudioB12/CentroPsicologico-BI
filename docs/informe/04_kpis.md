@@ -44,7 +44,7 @@ El modelo analitico define **13 KPIs** distribuidos en tres areas: operacional, 
 ```mermaid
 flowchart TD
   subgraph FIN["Area Financiera"]
-    direction LR
+
     K1["KPI 1\nMargen Bruto %"]
     K7["KPI 7\nIngresos por Psicologo"]
     K10["KPI 10\nTicket Promedio"]
@@ -52,7 +52,7 @@ flowchart TD
   end
 
   subgraph OP["Area Operacional"]
-    direction LR
+
     K2["KPI 2\n% Recurrentes"]
     K3["KPI 3\nSesiones/Psicologo"]
     K4["KPI 4\nAbandono Terapeutico"]
@@ -62,7 +62,7 @@ flowchart TD
   end
 
   subgraph CLI["Area Clinica"]
-    direction LR
+
     K8["KPI 8\nTiempo Espera\nFase 2"]
     K9["KPI 9\nNPS Paciente\nFase 2"]
     K11["KPI 11\nTop CIE-10"]

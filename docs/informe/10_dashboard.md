@@ -30,21 +30,21 @@ El dashboard incluye los tres comparativos obligatorios del curso:
 ```mermaid
 flowchart TD
   subgraph LOGICA["Logica de comparacion YoY"]
-    direction LR
+
     PA["Periodo actual\nMes N del Ano X"]
     PP["Mismo periodo\nMes N del Ano X-1"]
     VAR["Variacion YoY %\n(actual - anterior) / anterior"]
   end
 
   subgraph KPI["KPIs con variacion YoY"]
-    direction LR
+
     K1["Sesiones Realizadas\nvs. mismo mes ano anterior"]
     K2["Ingresos Totales S/.\nvs. mismo mes ano anterior"]
     K3["Tasa Cancelacion %\nvs. mismo mes ano anterior"]
   end
 
   subgraph DAX["Medidas DAX YoY"]
-    direction LR
+
     D1["Ingresos Ano Anterior =\nCALCULATE([Monto Total Cobrado],\nSAMEPERIODLASTYEAR('dim_tiempo'[fecha]))"]
     D2["Variacion YoY % =\nDIVIDE([Monto Total Cobrado] -\n[Ingresos Ano Anterior],\n[Ingresos Ano Anterior], 0) * 100"]
   end
@@ -60,14 +60,14 @@ flowchart TD
 ```mermaid
 flowchart TD
   subgraph LOGICA["Logica de comparacion MoM"]
-    direction LR
+
     PA["Mes actual\nN"]
     PP["Mes anterior\nN-1"]
     VAR["Variacion MoM %\n(N - N-1) / N-1"]
   end
 
   subgraph DAX["Medidas DAX MoM"]
-    direction LR
+
     D1["Ingresos Periodo Anterior =\nCALCULATE([Monto Total Cobrado],\nPREVIOUSMONTH('dim_tiempo'[fecha]))"]
     D2["Variacion MoM % =\nDIVIDE([Monto Total Cobrado] -\n[Ingresos Periodo Anterior],\n[Ingresos Periodo Anterior], 0) * 100"]
   end
@@ -96,7 +96,7 @@ flowchart TD
 ```mermaid
 flowchart TD
   subgraph DASH["Tablero Ejecutivo — Visuales obligatorios"]
-    direction LR
+
     V1["Tarjetas KPI\nIngresos · Sesiones\nMargen · Ticket Prom."]
     V2["Grafico lineas mensual\nTendencia ingresos\ny sesiones por mes"]
     V3["Comparativo YoY\nActual vs mismo mes\nano anterior"]
@@ -105,7 +105,7 @@ flowchart TD
   end
 
   subgraph SEG["Segmentadores"]
-    direction LR
+
     S1["Ano / Mes"]
     S2["Sede"]
     S3["Psicologo"]

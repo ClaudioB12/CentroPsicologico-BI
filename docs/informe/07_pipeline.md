@@ -27,7 +27,6 @@ La solucion implementa una **captura de datos basada en eventos en tiempo real (
 ```mermaid
 flowchart TD
   subgraph BRONZE["Bronze — schema raw"]
-    direction LR
     R1[raw.sedes]
     R2[raw.psicologos]
     R3[raw.pacientes]
@@ -40,7 +39,6 @@ flowchart TD
   end
 
   subgraph SILVER["Silver — schema staging"]
-    direction LR
     S1[stg_sedes]
     S2[stg_psicologos]
     S3[stg_pacientes]
@@ -53,7 +51,6 @@ flowchart TD
   end
 
   subgraph GOLD["Gold — schema datamart"]
-    direction LR
     D1[dim_sede]
     D2[dim_psicologo]
     D3[dim_paciente]

@@ -7,7 +7,7 @@ La solucion analitica implementa una arquitectura componible y desacoplada basad
 ```mermaid
 flowchart TD
   subgraph OLTP["Capa 1 — OLTP MySQL 8.0 (db:3306)"]
-    direction LR
+
     T1["sedes · psicologos · pacientes"]
     T2["historia_clinica · sesiones"]
     T3["evaluacion_psicologica · diagnosticos\nplan_intervencion · pagos"]
@@ -30,7 +30,7 @@ flowchart TD
   end
 
   subgraph BI["Capa 4 — Modelo Semantico y Consumo BI"]
-    direction LR
+
     PBI["Power BI Desktop\nImport Mode desde localhost:5432\n13 KPIs · 3 dashboards"]
   end
 
@@ -63,7 +63,7 @@ flowchart TD
     DB["db\nMySQL 8.0\n:3306\nbinlog ROW habilitado\nvolumen: init.sql"]
 
     subgraph KAFKA_CLUSTER["Cluster Kafka Confluent 7.5.0"]
-      direction LR
+
       ZK["zookeeper\n:2181"]
       KF["kafka\n:9092"]
       ZK -->|coordinacion| KF
@@ -79,7 +79,7 @@ flowchart TD
     DBT_SVC["dbt\ndbt run — 20 modelos\nstaging + marts"]
 
     subgraph MONITOREO["Interfaces Web"]
-      direction LR
+
       KUI["kafka-ui\n:8080"]
       PGADMIN["pgadmin\n:5050"]
     end

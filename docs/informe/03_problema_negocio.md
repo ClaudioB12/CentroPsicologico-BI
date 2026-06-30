@@ -28,7 +28,7 @@ El objetivo analitico del proyecto consiste en **disenar, implementar y validar 
 ```mermaid
 flowchart TD
   subgraph PROBLEMAS["Problemas criticos identificados"]
-    direction LR
+
     P1["18% citas\nno realizadas"]
     P2["Abandono\nterapeutico\nsin medir"]
     P3["Productividad\nstaff\nno medible"]
@@ -36,7 +36,7 @@ flowchart TD
   end
 
   subgraph SOLUCION["Solucion BI implementada"]
-    direction LR
+
     S1["KPI Tasa\nCancelacion\ny No-Show"]
     S2["KPI Tasa\nAbandono\nTerapeutico"]
     S3["KPI Sesiones\npor Psicologo\ne Ingresos"]
@@ -44,7 +44,7 @@ flowchart TD
   end
 
   subgraph DECISION["Decisiones mejoradas"]
-    direction LR
+
     D1["Protocolo\nconfirmacion\n24h WhatsApp"]
     D2["Campana\nreenganche\nterapeutico"]
     D3["Redistribucion\ncarga por\npsicologos"]

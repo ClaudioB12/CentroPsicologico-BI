@@ -3,48 +3,36 @@
 ## Pipeline completo: MySQL → Kafka → PostgreSQL → dbt → BI
 
 ```mermaid
-flowchart LR
-  subgraph OLTP["MySQL 8.0 — dm_centro_psicologico (db:3306)"]
-    MYSQL[(dm_centro_psicologico)]
-    T_SEDES[sedes]
-    T_PSICOLOGOS[psicologos]
-    T_PACIENTES[pacientes]
-    T_HISTORIA[historia_clinica]
-    T_SESIONES[sesiones]
-    T_EVAL[evaluacion_psicologica]
-    T_DIAG[diagnosticos]
-    T_PLANES[plan_intervencion]
-    T_PAGOS[pagos]
-    MYSQL --> T_SEDES & T_PSICOLOGOS & T_PACIENTES
-    MYSQL --> T_HISTORIA & T_SESIONES
-    MYSQL --> T_EVAL & T_DIAG & T_PLANES & T_PAGOS
+flowchart TD
+  subgraph CAPA1["① Fuente OLTP — MySQL 8.0  puerto 3306"]
+    T1["sesiones · pagos · evaluacion_psicologica"]
+    T2["pacientes · psicologos · sedes"]
+    T3["historia_clinica · diagnosticos · plan_intervencion"]
   end
 
-  subgraph CDC["Kafka Connect — kafka-connect:8083"]
-    DBZ["mysql-source-connector\nDebezium MySqlConnector\nhost: db:3306 | snapshot: initial"]
-    KAFKA[("Kafka 7.5.0 — kafka:9092\ntopics: centro.dm_centro_psicologico.*\ndbhistory.dm_centro_psicologico")]
-    SINK["postgres-sink-connector\nJDBC Sink + RegexRouter\nupsert por record_key → schema raw"]
+  subgraph CAPA2["② Ingesta CDC — Debezium + Apache Kafka"]
+    DBZ["mysql-source-connector\nDebezium MySqlConnector 2.4.2\nhost: db:3306  |  snapshot: initial"]
+    KAFKA[("Kafka 7.5.0  puerto 9092\ntopics: centro.dm_centro_psicologico.*")]
+    SINK["postgres-sink-connector\nJDBC Sink 10.9.3 + RegexRouter\nupsert por record_key → schema raw"]
     DBZ -->|"topic.prefix=centro"| KAFKA
     KAFKA -->|"consume + RegexRouter"| SINK
   end
 
-  subgraph DW["PostgreSQL 15 — dm_centro_psicologico (postgres:5432)"]
+  subgraph CAPA3["③ Data Warehouse — PostgreSQL 15  puerto 5432"]
     RAW[("schema: raw\n9 tablas replicadas\nauto.create + auto.evolve")]
-    STAGING[("schema: staging\n9 modelos stg_*\ndbt materializa como tabla")]
-    DATAMART[("schema: datamart\n6 dims + 3 facts\ndbt materializa como tabla")]
-    RAW -->|"dbt source('raw', ...)"| STAGING
+    STAGING[("schema: staging\n9 modelos stg_* + 1 int_ephemeral\ndbt materializa como tabla")]
+    DATAMART[("schema: datamart\n6 dimensiones + 3 hechos\ndbt materializa como tabla")]
+    RAW -->|"dbt source refs"| STAGING
     STAGING -->|"dbt ref() + SQL joins"| DATAMART
   end
 
-  subgraph BI["Consumo BI"]
-    EXP["dbt exposures\ndashboard_operacional\ndashboard_financiero\ndashboard_clinico\nreporte_pacientes"]
-    PBI["Power BI\n(archivo .pbix pendiente)"]
-    EXP -.->|"modelo pendiente"| PBI
+  subgraph CAPA4["④ Business Intelligence — Power BI Desktop"]
+    PBI["Power BI Import Mode\nconexion localhost:5432 → schema datamart\n13 KPIs  ·  3 tableros  ·  4 jerarquias"]
   end
 
-  OLTP -->|"binlog ROW + Debezium capture"| DBZ
-  SINK -->|"upsert a PostgreSQL"| RAW
-  DATAMART -->|"dbt exposures.yml"| EXP
+  CAPA1    -->|"binlog ROW capturado por Debezium"| DBZ
+  SINK     -->|"upsert a PostgreSQL schema raw"| RAW
+  DATAMART -->|"conexion directa Import Mode"| PBI
 ```
 
 ---
@@ -54,38 +42,29 @@ flowchart LR
 Todos los servicios corren en la red `cdc_network` definida en `docker-compose.yml`.
 
 ```mermaid
-flowchart TB
-  subgraph COMPOSE["docker-compose.yml — cdc_network (bridge)"]
-    subgraph KAFKA_CLUSTER["Cluster Kafka (Confluent 7.5.0)"]
-      ZK["zookeeper\n:2181"]
-      KF["kafka\n:9092"]
-      ZK -->|coordinacion| KF
-    end
-
-    subgraph CONNECT["Kafka Connect"]
-      KC["kafka-connect\n:8083\nDebezium MySQL 2.4.2\nJDBC Sink 10.9.3\nPG JDBC 42.7.4"]
-      CI["connector-init\nregistra conectores via\nREST POST /connectors"]
-      CI -->|"POST /connectors"| KC
-    end
-
-    DB["db\nMySQL 8.0\n:3306\nbinlog ROW habilitado"]
-    PG["postgres\nPostgreSQL 15\n:5432"]
+flowchart TD
+  subgraph COMPOSE["docker-compose.yml — red cdc_network bridge"]
+    DB["db\nMySQL 8.0  ·  puerto 3306\nbinlog ROW habilitado"]
+    ZK["zookeeper\npuerto 2181"]
+    KF["kafka\npuerto 9092"]
+    KC["kafka-connect  ·  puerto 8083\nDebezium MySqlConnector 2.4.2\nJDBC Sink 10.9.3  ·  PG JDBC 42.7.4"]
+    CI["connector-init\nregistra conectores al inicio\nvia REST POST /connectors"]
+    PG["postgres\nPostgreSQL 15  ·  puerto 5432"]
     DBT_SVC["dbt\ndbt run\nestaging + datamart"]
-
-    subgraph MONITOREO["Interfaces Web"]
-      KUI["kafka-ui\n:8080"]
-      PGADMIN["pgadmin\n:5050"]
-    end
+    KUI["kafka-ui\npuerto 8080"]
+    PGADMIN["pgadmin\npuerto 5050"]
   end
 
-  DB -->|"binlog ROW"| KC
-  KF <-->|"broker"| KC
-  KC -->|"JDBC Sink upsert"| PG
-  PG -->|"lee schema raw.*"| DBT_SVC
-  DBT_SVC -->|"escribe staging.* y datamart.*"| PG
-  KUI -.->|"monitorea topics"| KF
-  KUI -.->|"monitorea conectores"| KC
-  PGADMIN -.->|"administra"| PG
+  ZK       -->|"coordinacion de cluster"| KF
+  CI       -->|"POST /connectors"| KC
+  DB       -->|"binlog ROW"| KC
+  KF      <-->|"broker de mensajes"| KC
+  KC       -->|"JDBC Sink upsert"| PG
+  PG       -->|"lee schema raw.*"| DBT_SVC
+  DBT_SVC  -->|"escribe staging.* y datamart.*"| PG
+  KUI     -.->|"monitorea topics"| KF
+  KUI     -.->|"monitorea conectores"| KC
+  PGADMIN -.->|"administra bases de datos"| PG
 ```
 
 ---

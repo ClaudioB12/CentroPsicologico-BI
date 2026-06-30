@@ -19,7 +19,7 @@ Ver [Modelo Dimensional](../diagrams/modelo_dimensional.md) para el diagrama ER 
 ```mermaid
 flowchart TD
   subgraph DIMS["Dimensiones conformadas"]
-    direction LR
+
     DP[DIM_PACIENTE\n100 pacientes]
     DPS[DIM_PSICOLOGO\n6 psicologos]
     DS[DIM_SEDE\n2 sedes]
