@@ -12,13 +12,13 @@
         <meta name="author" content="Claudio Bustinza · Josue Ochoa · Joel Huillca · Wilbert Mayta">
       
       
-        <link rel="canonical" href="https://claudiob12.github.io/CentroPsicologico-BI/diagrams/oltp_schema/">
+        <link rel="canonical" href="https://claudiob12.github.io/CentroPsicologico-BI/informe/07_pipeline/">
       
       
-        <link rel="prev" href="../lineaje_dbt/">
+        <link rel="prev" href="../06_oltp/">
       
       
-        <link rel="next" href="../modelo_dimensional/">
+        <link rel="next" href="../08_datamart/">
       
       
       <link rel="icon" href="../../assets/images/favicon.png">
@@ -26,7 +26,7 @@
     
     
       
-        <title>Esquema OLTP MySQL - Centro Psicologico BI</title>
+        <title>7. Pipeline de Ingesta y Transformacion - Centro Psicologico BI</title>
       
     
     
@@ -78,7 +78,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#esquema-oltp-mysql" class="md-skip">
+        <a href="#7-pipeline-de-ingesta-y-transformacion" class="md-skip">
           Saltar a contenido
         </a>
       
@@ -112,7 +112,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Esquema OLTP MySQL
+              7. Pipeline de Ingesta y Transformacion
             
           </span>
         </div>
@@ -242,11 +242,13 @@
   
   
   
+    
+  
   
     
     
-      <li class="md-tabs__item">
-        <a href="../../informe/01_datos_generales/" class="md-tabs__link">
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../01_datos_generales/" class="md-tabs__link">
           
   
   
@@ -262,13 +264,11 @@
   
   
   
-    
-  
   
     
     
-      <li class="md-tabs__item md-tabs__item--active">
-        <a href="../arquitectura/" class="md-tabs__link">
+      <li class="md-tabs__item">
+        <a href="../../diagrams/arquitectura/" class="md-tabs__link">
           
   
   
@@ -389,26 +389,31 @@
       
   
   
+    
   
   
+  
     
     
     
     
+      
+        
+        
       
       
         
       
     
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
         
           
-          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
             
   
   
@@ -421,7 +426,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_2">
             <span class="md-nav__icon md-icon"></span>
             Producto del Curso
@@ -435,7 +440,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../informe/01_datos_generales/" class="md-nav__link">
+      <a href="../01_datos_generales/" class="md-nav__link">
         
   
   
@@ -458,7 +463,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../informe/02_resumen_ejecutivo/" class="md-nav__link">
+      <a href="../02_resumen_ejecutivo/" class="md-nav__link">
         
   
   
@@ -481,7 +486,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../informe/03_problema_negocio/" class="md-nav__link">
+      <a href="../03_problema_negocio/" class="md-nav__link">
         
   
   
@@ -504,7 +509,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../informe/04_kpis/" class="md-nav__link">
+      <a href="../04_kpis/" class="md-nav__link">
         
   
   
@@ -527,7 +532,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../informe/05_arquitectura/" class="md-nav__link">
+      <a href="../05_arquitectura/" class="md-nav__link">
         
   
   
@@ -550,228 +555,12 @@
   
   
     <li class="md-nav__item">
-      <a href="../../informe/06_oltp/" class="md-nav__link">
+      <a href="../06_oltp/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     6. Fuente Transaccional OLTP
-    
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../informe/07_pipeline/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    7. Pipeline de Ingesta y Transformacion
-    
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../informe/08_datamart/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    8. Data Warehouse y DataMart
-    
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../informe/09_modelo_semantico/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    9. Modelo Semantico Power BI
-    
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../informe/10_dashboard/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    10. Dashboard Interactivo
-    
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../informe/15_sustentacion/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    15. Sustentacion Tecnica
-    
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-          </ul>
-        </nav>
-      
-    </li>
-  
-
-    
-      
-      
-  
-  
-    
-  
-  
-  
-    
-    
-    
-    
-      
-        
-        
-      
-      
-        
-      
-    
-    
-    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
-      
-        
-        
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
-        
-          
-          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
-            
-  
-  
-  <span class="md-ellipsis">
-    Diagramas
-    
-  </span>
-  
-
-            <span class="md-nav__icon md-icon"></span>
-          </label>
-        
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
-          <label class="md-nav__title" for="__nav_3">
-            <span class="md-nav__icon md-icon"></span>
-            Diagramas
-          </label>
-          <ul class="md-nav__list" data-md-scrollfix>
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../arquitectura/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    Arquitectura CDC y BI
-    
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../lineaje_dbt/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    Lineaje dbt
     
   </span>
   
@@ -803,7 +592,7 @@
   
   
   <span class="md-ellipsis">
-    Esquema OLTP MySQL
+    7. Pipeline de Ingesta y Transformacion
     
   </span>
   
@@ -816,7 +605,7 @@
   
   
   <span class="md-ellipsis">
-    Esquema OLTP MySQL
+    7. Pipeline de Ingesta y Transformacion
     
   </span>
   
@@ -839,27 +628,78 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#diagrama-er" class="md-nav__link">
+  <a href="#71-ingesta-cdc-debezium-kafka" class="md-nav__link">
     <span class="md-ellipsis">
-      Diagrama ER
+      7.1 Ingesta CDC — Debezium + Kafka
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#descripcion-de-tablas" class="md-nav__link">
+  <a href="#72-capas-de-datos" class="md-nav__link">
     <span class="md-ellipsis">
-      Descripcion de tablas
+      7.2 Capas de datos
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#notas-del-esquema" class="md-nav__link">
+  <a href="#73-modelos-de-transformacion-dbt" class="md-nav__link">
     <span class="md-ellipsis">
-      Notas del esquema
+      7.3 Modelos de transformacion dbt
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="7.3 Modelos de transformacion dbt">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#modelos-staging-9-modelos" class="md-nav__link">
+    <span class="md-ellipsis">
+      Modelos Staging (9 modelos)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#modelo-intermedio-1-modelo-ephemeral" class="md-nav__link">
+    <span class="md-ellipsis">
+      Modelo Intermedio (1 modelo ephemeral)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#modelos-marts-dimensiones-6-modelos" class="md-nav__link">
+    <span class="md-ellipsis">
+      Modelos Marts — Dimensiones (6 modelos)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#modelos-marts-hechos-3-modelos" class="md-nav__link">
+    <span class="md-ellipsis">
+      Modelos Marts — Hechos (3 modelos)
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#74-evidencia-de-ejecucion" class="md-nav__link">
+    <span class="md-ellipsis">
+      7.4 Evidencia de ejecucion
     </span>
   </a>
   
@@ -881,7 +721,218 @@
   
   
     <li class="md-nav__item">
-      <a href="../modelo_dimensional/" class="md-nav__link">
+      <a href="../08_datamart/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    8. Data Warehouse y DataMart
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../09_modelo_semantico/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    9. Modelo Semantico Power BI
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../10_dashboard/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    10. Dashboard Interactivo
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../15_sustentacion/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    15. Sustentacion Tecnica
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Diagramas
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            Diagramas
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../diagrams/arquitectura/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Arquitectura CDC y BI
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../diagrams/lineaje_dbt/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Lineaje dbt
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../diagrams/oltp_schema/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Esquema OLTP MySQL
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../diagrams/modelo_dimensional/" class="md-nav__link">
         
   
   
@@ -975,27 +1026,78 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#diagrama-er" class="md-nav__link">
+  <a href="#71-ingesta-cdc-debezium-kafka" class="md-nav__link">
     <span class="md-ellipsis">
-      Diagrama ER
+      7.1 Ingesta CDC — Debezium + Kafka
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#descripcion-de-tablas" class="md-nav__link">
+  <a href="#72-capas-de-datos" class="md-nav__link">
     <span class="md-ellipsis">
-      Descripcion de tablas
+      7.2 Capas de datos
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#notas-del-esquema" class="md-nav__link">
+  <a href="#73-modelos-de-transformacion-dbt" class="md-nav__link">
     <span class="md-ellipsis">
-      Notas del esquema
+      7.3 Modelos de transformacion dbt
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="7.3 Modelos de transformacion dbt">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#modelos-staging-9-modelos" class="md-nav__link">
+    <span class="md-ellipsis">
+      Modelos Staging (9 modelos)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#modelo-intermedio-1-modelo-ephemeral" class="md-nav__link">
+    <span class="md-ellipsis">
+      Modelo Intermedio (1 modelo ephemeral)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#modelos-marts-dimensiones-6-modelos" class="md-nav__link">
+    <span class="md-ellipsis">
+      Modelos Marts — Dimensiones (6 modelos)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#modelos-marts-hechos-3-modelos" class="md-nav__link">
+    <span class="md-ellipsis">
+      Modelos Marts — Hechos (3 modelos)
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#74-evidencia-de-ejecucion" class="md-nav__link">
+    <span class="md-ellipsis">
+      7.4 Evidencia de ejecucion
     </span>
   </a>
   
@@ -1020,207 +1122,376 @@
   
 
 
-<h1 id="esquema-oltp-mysql">Esquema OLTP MySQL<a class="headerlink" href="#esquema-oltp-mysql" title="Permanent link">&para;</a></h1>
-<p>Diagrama entidad-relacion del esquema operacional <code>dm_centro_psicologico</code> definido en <code>init.sql</code> y montado por el <code>docker-compose.yml</code> principal.</p>
-<h2 id="diagrama-er">Diagrama ER<a class="headerlink" href="#diagrama-er" title="Permanent link">&para;</a></h2>
-<pre class="mermaid"><code>erDiagram
-  sedes ||--o{ psicologos : "sede_id"
-  sedes ||--o{ pacientes : "sede_id"
-  pacientes ||--o{ historia_clinica : "paciente_id"
-  historia_clinica ||--o{ sesiones : "historia_id"
-  psicologos ||--o{ sesiones : "psicologo_id"
-  sesiones ||--o| evaluacion_psicologica : "sesion_id (UNIQUE)"
-  sesiones ||--o{ diagnosticos : "sesion_id"
-  sesiones ||--o{ plan_intervencion : "sesion_id"
-  sesiones ||--o{ pagos : "sesion_id"
-
-  sedes {
-    INT sede_id PK
-    VARCHAR nombre_sede
-    VARCHAR ciudad
-    TINYINT tiene_online
-    ENUM estado
-  }
-
-  psicologos {
-    INT psicologo_id PK
-    INT sede_id FK
-    VARCHAR dni
-    VARCHAR nombres
-    VARCHAR especialidad
-    VARCHAR cpp
-    ENUM modalidad
-    ENUM estado
-  }
-
-  pacientes {
-    INT paciente_id PK
-    INT sede_id FK
-    VARCHAR nombres
-    VARCHAR apellido_paterno
-    VARCHAR apellido_materno
-    ENUM tipo_documento
-    VARCHAR numero_documento
-    DATE fecha_nacimiento
-    ENUM sexo
-    VARCHAR estado_civil
-    VARCHAR grado_instruccion
-    VARCHAR ocupacion
-    VARCHAR celular
-    VARCHAR email
-    DATE fecha_registro
-    VARCHAR canal_captacion
-    ENUM estado_paciente
-    ENUM modalidad_preferida
-  }
-
-  historia_clinica {
-    INT historia_id PK
-    INT paciente_id FK
-    VARCHAR codigo_historia
-    ENUM tipo_historial
-    DATE fecha_apertura
-    TEXT observaciones_generales
-    ENUM estado_historia
-  }
-
-  sesiones {
-    INT sesion_id PK
-    INT historia_id FK
-    INT psicologo_id FK
-    DATE fecha_sesion
-    TIME hora_sesion
-    SMALLINT nro_sesion
-    VARCHAR etapa_atencion
-    ENUM modalidad
-    SMALLINT duracion_min
-    VARCHAR motivo_consulta
-    TEXT observaciones
-    ENUM estado_sesion
-  }
-
-  evaluacion_psicologica {
-    INT evaluacion_id PK
-    INT sesion_id FK
-    TEXT metodos_aplicados
-    TEXT resultados
-    DECIMAL puntaje_cdi
-    DECIMAL puntaje_stai
-    TEXT observaciones
-    DATE fecha_evaluacion
-  }
-
-  diagnosticos {
-    INT diagnostico_id PK
-    INT sesion_id FK
-    VARCHAR codigo_cie10
-    VARCHAR descripcion_cie10
-    TEXT diagnostico_clinico
-    TEXT observaciones
-  }
-
-  plan_intervencion {
-    INT plan_id PK
-    INT sesion_id FK
-    TEXT objetivos
-    TEXT intervenciones
-    TEXT recomendaciones
-    DATE fecha_inicio
-    DATE fecha_fin
-    ENUM estado_plan
-  }
-
-  pagos {
-    INT pago_id PK
-    INT sesion_id FK
-    DATE fecha_pago
-    DECIMAL monto
-    VARCHAR comprobante
-    ENUM metodo_pago
-    ENUM estado_pago
-    TEXT observaciones
-  }</code></pre>
-<hr />
-<h2 id="descripcion-de-tablas">Descripcion de tablas<a class="headerlink" href="#descripcion-de-tablas" title="Permanent link">&para;</a></h2>
+<h1 id="7-pipeline-de-ingesta-y-transformacion">7. Pipeline de Ingesta y Transformacion<a class="headerlink" href="#7-pipeline-de-ingesta-y-transformacion" title="Permanent link">&para;</a></h1>
+<p>La solucion implementa una <strong>captura de datos basada en eventos en tiempo real (CDC incremental)</strong>, rompiendo con el paradigma clasico de carga batch programada. Cada cambio registrado en el motor transaccional MySQL (INSERT, UPDATE, DELETE) es capturado por Debezium desde el binlog y transportado hacia PostgreSQL sin bloquear las tablas operativas del centro.</p>
+<h2 id="71-ingesta-cdc-debezium-kafka">7.1 Ingesta CDC — Debezium + Kafka<a class="headerlink" href="#71-ingesta-cdc-debezium-kafka" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
 <tr>
-<th>Tabla</th>
-<th>Proposito</th>
-<th>PK</th>
-<th>FKs</th>
+<th>Origen MySQL</th>
+<th>Destino raw PostgreSQL</th>
+<th>Herramienta</th>
+<th>Tipo de carga</th>
+<th>Estado</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td><code>sedes</code></td>
-<td>Locaciones fisicas y online del centro</td>
-<td><code>sede_id</code></td>
-<td>—</td>
+<td>sesiones</td>
+<td>raw.sesiones</td>
+<td>Debezium + Apache Kafka</td>
+<td>CDC Incremental Streaming</td>
+<td>Activo / RUNNING</td>
 </tr>
 <tr>
-<td><code>psicologos</code></td>
-<td>Profesionales registrados</td>
-<td><code>psicologo_id</code></td>
-<td><code>sede_id → sedes</code></td>
+<td>pagos</td>
+<td>raw.pagos</td>
+<td>Debezium + Apache Kafka</td>
+<td>CDC Incremental Streaming</td>
+<td>Activo / RUNNING</td>
 </tr>
 <tr>
-<td><code>pacientes</code></td>
-<td>Personas en atencion o evaluacion</td>
-<td><code>paciente_id</code></td>
-<td><code>sede_id → sedes</code></td>
+<td>evaluacion_psicologica</td>
+<td>raw.evaluacion_psicologica</td>
+<td>Debezium + Apache Kafka</td>
+<td>CDC Incremental Streaming</td>
+<td>Activo / RUNNING</td>
 </tr>
 <tr>
-<td><code>historia_clinica</code></td>
-<td>Expediente clinico de cada paciente</td>
-<td><code>historia_id</code></td>
-<td><code>paciente_id → pacientes</code></td>
+<td>pacientes</td>
+<td>raw.pacientes</td>
+<td>Debezium + Apache Kafka</td>
+<td>CDC Incremental Streaming</td>
+<td>Activo / RUNNING</td>
 </tr>
 <tr>
-<td><code>sesiones</code></td>
-<td>Citas individuales o de pareja</td>
-<td><code>sesion_id</code></td>
-<td><code>historia_id → historia_clinica</code>, <code>psicologo_id → psicologos</code></td>
+<td>psicologos</td>
+<td>raw.psicologos</td>
+<td>Debezium + Apache Kafka</td>
+<td>CDC Incremental Streaming</td>
+<td>Activo / RUNNING</td>
 </tr>
 <tr>
-<td><code>evaluacion_psicologica</code></td>
-<td>Resultados de pruebas aplicadas (1:1 con sesion)</td>
-<td><code>evaluacion_id</code></td>
-<td><code>sesion_id → sesiones</code> (UNIQUE)</td>
+<td>historia_clinica</td>
+<td>raw.historia_clinica</td>
+<td>Debezium + Apache Kafka</td>
+<td>CDC Incremental Streaming</td>
+<td>Activo / RUNNING</td>
 </tr>
 <tr>
-<td><code>diagnosticos</code></td>
-<td>Codigos CIE-10 asociados a sesiones</td>
-<td><code>diagnostico_id</code></td>
-<td><code>sesion_id → sesiones</code></td>
+<td>sedes</td>
+<td>raw.sedes</td>
+<td>Debezium + Apache Kafka</td>
+<td>CDC Incremental Streaming</td>
+<td>Activo / RUNNING</td>
 </tr>
 <tr>
-<td><code>plan_intervencion</code></td>
-<td>Objetivos y tecnicas de tratamiento</td>
-<td><code>plan_id</code></td>
-<td><code>sesion_id → sesiones</code></td>
+<td>diagnosticos</td>
+<td>raw.diagnosticos</td>
+<td>Debezium + Apache Kafka</td>
+<td>CDC Incremental Streaming</td>
+<td>Activo / RUNNING</td>
 </tr>
 <tr>
-<td><code>pagos</code></td>
-<td>Transacciones economicas por sesion</td>
-<td><code>pago_id</code></td>
-<td><code>sesion_id → sesiones</code></td>
+<td>plan_intervencion</td>
+<td>raw.plan_intervencion</td>
+<td>Debezium + Apache Kafka</td>
+<td>CDC Incremental Streaming</td>
+<td>Activo / RUNNING</td>
 </tr>
 </tbody>
 </table>
-<h2 id="notas-del-esquema">Notas del esquema<a class="headerlink" href="#notas-del-esquema" title="Permanent link">&para;</a></h2>
-<div class="admonition note">
-<p class="admonition-title">Etapas de atencion</p>
-<p>El campo <code>etapa_atencion</code> en <code>sesiones</code> clasifica cada sesion como <code>MOTIVO_CONSULTA</code>, <code>ANAMNESIS</code>, <code>EVALUACION</code>, <code>TRATAMIENTO</code>, <code>SEGUIMIENTO</code> o <code>CIERRE</code>. Los datos de muestra de <code>init.sql</code> solo insertan <code>evaluacion_psicologica</code> para sesiones con <code>etapa_atencion = 'EVALUACION'</code> y <code>plan_intervencion</code> para sesiones con <code>etapa_atencion = 'TRATAMIENTO'</code>.</p>
-</div>
-<div class="admonition warning">
-<p class="admonition-title">Relacion evaluacion_psicologica</p>
-<p><code>evaluacion_psicologica.sesion_id</code> tiene restriccion <code>UNIQUE</code>, por lo que la relacion es 1:0..1 (una sesion puede tener a lo sumo una evaluacion). En el diagrama se representa como <code>||--o|</code>.</p>
-</div>
-<div class="admonition info">
-<p class="admonition-title">Diferencia con OLTP_Centro_Psicologico.sql</p>
-<p>El archivo <code>OLTP_Centro_Psicologico.sql</code> contiene un esquema anterior con tablas prefijadas <code>oltp_*</code> (4 tablas). <strong>No es el DDL montado por el <code>docker-compose.yml</code> principal.</strong> El esquema activo es el descrito en esta pagina.</p>
-</div>
+<p><strong>Configuracion de los conectores:</strong></p>
+<ul>
+<li><code>mysql-source-connector</code>: <code>io.debezium.connector.mysql.MySqlConnector</code>, <code>topic.prefix=centro</code>, <code>database.include.list=dm_centro_psicologico</code>, <code>snapshot.mode=initial</code></li>
+<li><code>postgres-sink-connector</code>: <code>io.confluent.connect.jdbc.JdbcSinkConnector</code>, <code>insert.mode=upsert</code>, <code>pk.mode=record_key</code>, <code>auto.create=true</code>, <code>auto.evolve=true</code></li>
+<li><strong>RegexRouter</strong> transforma los topics <code>centro.dm_centro_psicologico.&lt;tabla&gt;</code> → nombre de tabla en schema <code>raw</code></li>
+</ul>
+<h2 id="72-capas-de-datos">7.2 Capas de datos<a class="headerlink" href="#72-capas-de-datos" title="Permanent link">&para;</a></h2>
+<pre class="mermaid"><code>flowchart TD
+  subgraph BRONZE["Bronze — schema raw"]
+    direction LR
+    R1[raw.sedes]
+    R2[raw.psicologos]
+    R3[raw.pacientes]
+    R4[raw.historia_clinica]
+    R5[raw.sesiones]
+    R6[raw.evaluacion_psicologica]
+    R7[raw.diagnosticos]
+    R8[raw.plan_intervencion]
+    R9[raw.pagos]
+  end
+
+  subgraph SILVER["Silver — schema staging"]
+    direction LR
+    S1[stg_sedes]
+    S2[stg_psicologos]
+    S3[stg_pacientes]
+    S4[stg_historia_clinica]
+    S5[stg_sesiones]
+    S6[stg_evaluaciones]
+    S7[stg_diagnosticos]
+    S8[stg_planes]
+    S9[stg_pagos]
+  end
+
+  subgraph GOLD["Gold — schema datamart"]
+    direction LR
+    D1[dim_sede]
+    D2[dim_psicologo]
+    D3[dim_paciente]
+    D4[dim_tiempo]
+    D5[dim_servicio]
+    D6[dim_diagnostico]
+    F1[fact_sesion]
+    F2[fact_facturacion]
+    F3[fact_evaluacion]
+  end
+
+  BRONZE --&gt;|"dbt source refs"| SILVER
+  SILVER --&gt;|"dbt ref() + joins"| GOLD</code></pre>
+<table>
+<thead>
+<tr>
+<th>Capa</th>
+<th>Equivalencia</th>
+<th>Proposito</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>raw</code></td>
+<td>Bronze</td>
+<td>Zona de aterrizaje directo. Almacena replicas exactas inyectadas por el Kafka Sink Connector sin transformaciones. Estructura append-only que garantiza linaje completo del dato desde el origen.</td>
+</tr>
+<tr>
+<td><code>staging</code></td>
+<td>Silver</td>
+<td>Capa de preparacion orquestada por dbt. Aplica transformaciones atomicas: renombrado de campos, tipado explicito (CAST), control de nulos (COALESCE) y conversion de estados a flags booleanos.</td>
+</tr>
+<tr>
+<td><code>datamart (marts)</code></td>
+<td>Gold</td>
+<td>Capa de entrega final estructurada bajo el Modelo Constelacion. Contiene 6 dimensiones conformadas y 3 tablas de hechos optimizadas para consultas analiticas desde Power BI en Import Mode.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="73-modelos-de-transformacion-dbt">7.3 Modelos de transformacion dbt<a class="headerlink" href="#73-modelos-de-transformacion-dbt" title="Permanent link">&para;</a></h2>
+<p>El proyecto dbt materializa <strong>20 modelos</strong> distribuidos en tres capas logicas.</p>
+<h3 id="modelos-staging-9-modelos">Modelos Staging (9 modelos)<a class="headerlink" href="#modelos-staging-9-modelos" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Modelo</th>
+<th>Fuente</th>
+<th>Transformacion aplicada</th>
+<th>Resultado</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>stg_sedes.sql</code></td>
+<td>raw.sedes</td>
+<td>Convierte <code>tiene_online</code> TINYINT → booleano</td>
+<td>Vista estandarizada del catalogo de sedes</td>
+</tr>
+<tr>
+<td><code>stg_psicologos.sql</code></td>
+<td>raw.psicologos</td>
+<td>Estandarizacion de <code>nombre_completo</code>; filtrado <code>estado != 'INACTIVO'</code></td>
+<td>Vista del staff profesional activo con nomenclatura unificada</td>
+</tr>
+<tr>
+<td><code>stg_pacientes.sql</code></td>
+<td>raw.pacientes</td>
+<td><code>DATE '1970-01-01' + fecha_nacimiento</code> (entero Debezium → DATE); clasificacion de <code>rango_etario</code> con CASE WHEN</td>
+<td>Vista de pacientes con segmentacion demografica homogeneizada</td>
+</tr>
+<tr>
+<td><code>stg_historia_clinica.sql</code></td>
+<td>raw.historia_clinica</td>
+<td>Convierte <code>fecha_apertura</code>; estandariza <code>tipo_historial</code></td>
+<td>Expediente clinico con tipos y fechas validadas</td>
+</tr>
+<tr>
+<td><code>stg_sesiones.sql</code></td>
+<td>raw.sesiones</td>
+<td>Convierte <code>fecha_sesion</code>; <code>COALESCE(duracion_min, 0)</code>; mapea <code>estado_sesion</code> → flags booleanos <code>flag_realizada</code>, <code>flag_cancelada</code>, <code>flag_noshow</code>; identifica <code>flag_primera_sesion</code> cuando <code>nro_sesion = 1</code></td>
+<td>Vista estandarizada de sesiones con flags listos para agregacion</td>
+</tr>
+<tr>
+<td><code>stg_evaluaciones.sql</code></td>
+<td>raw.evaluacion_psicologica</td>
+<td><code>COALESCE</code> en <code>puntaje_cdi</code>/<code>puntaje_stai</code>; convierte <code>fecha_evaluacion</code>; estandariza <code>paciente_id</code> para join</td>
+<td>Vista de evaluaciones clinicas con fechas normalizadas</td>
+</tr>
+<tr>
+<td><code>stg_diagnosticos.sql</code></td>
+<td>raw.diagnosticos</td>
+<td>Estandariza <code>codigo_cie10</code> a formato alfanumerico controlado; filtra <code>codigo_cie10 IS NOT NULL</code></td>
+<td>Vista del maestro CIE-10 homologado</td>
+</tr>
+<tr>
+<td><code>stg_planes.sql</code></td>
+<td>raw.plan_intervencion</td>
+<td>Castea <code>costo_total</code> y <code>cobertura_sesiones</code> a tipos numericos; convierte <code>fecha_inicio</code>/<code>fecha_fin</code></td>
+<td>Vista de planes terapeuticos con tipos financieros validados</td>
+</tr>
+<tr>
+<td><code>stg_pagos.sql</code></td>
+<td>raw.pagos</td>
+<td>Convierte <code>fecha_pago</code>; <code>COALESCE(monto, 0.00)</code>; convierte tipos texto → DECIMAL(10,2)</td>
+<td>Vista de transacciones economicas con tipos de dato validados</td>
+</tr>
+</tbody>
+</table>
+<h3 id="modelo-intermedio-1-modelo-ephemeral">Modelo Intermedio (1 modelo ephemeral)<a class="headerlink" href="#modelo-intermedio-1-modelo-ephemeral" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Modelo</th>
+<th>Fuente</th>
+<th>Transformacion</th>
+<th>Resultado</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>int_sesiones_facturadas.sql</code></td>
+<td>stg_sesiones + stg_pagos</td>
+<td>INNER JOIN entre sesiones y pagos por <code>sesion_id</code>. Aislamiento de transacciones huerfanas. <strong>No genera tabla fisica</strong></td>
+<td>Join limpio de sesiones con su correspondiente facturacion, sin registros huerfanos</td>
+</tr>
+</tbody>
+</table>
+<h3 id="modelos-marts-dimensiones-6-modelos">Modelos Marts — Dimensiones (6 modelos)<a class="headerlink" href="#modelos-marts-dimensiones-6-modelos" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Modelo</th>
+<th>Fuente</th>
+<th>Descripcion</th>
+<th>Filas</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>dim_paciente.sql</code></td>
+<td>stg_pacientes</td>
+<td>Consolidacion de atributos maestros del paciente; persistencia del ultimo <code>estado_paciente</code></td>
+<td>100</td>
+</tr>
+<tr>
+<td><code>dim_psicologo.sql</code></td>
+<td>stg_psicologos</td>
+<td>Estructuracion jerarquica del staff profesional activo; indexacion por especialidad</td>
+<td>6</td>
+</tr>
+<tr>
+<td><code>dim_sede.sql</code></td>
+<td>stg_sedes</td>
+<td>Catalogo geografico normalizado; segmentacion regional en Juliaca</td>
+<td>2</td>
+</tr>
+<tr>
+<td><code>dim_servicio.sql</code></td>
+<td>stg_sesiones + stg_historia_clinica</td>
+<td>DISTINCT sobre <code>etapa_atencion + tipo_historial + modalidad</code></td>
+<td>8+ combinaciones</td>
+</tr>
+<tr>
+<td><code>dim_tiempo.sql</code></td>
+<td>Generacion analitica pura (macro dbt)</td>
+<td>Vector de fechas continuo; campos derivados: anio, semestre, trimestre, mes, semana, dia_semana, flag_fin_semana. Rango 2024–2026</td>
+<td>1,096 fechas</td>
+</tr>
+<tr>
+<td><code>dim_diagnostico.sql</code></td>
+<td>stg_diagnosticos</td>
+<td>Maestro dimensional homologado con CIE-10; DISTINCT por codigo</td>
+<td>15 codigos CIE-10</td>
+</tr>
+</tbody>
+</table>
+<h3 id="modelos-marts-hechos-3-modelos">Modelos Marts — Hechos (3 modelos)<a class="headerlink" href="#modelos-marts-hechos-3-modelos" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Modelo</th>
+<th>Fuente</th>
+<th>Descripcion</th>
+<th>Filas</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>fact_sesion.sql</code></td>
+<td>int_sesiones_facturadas + dims</td>
+<td>Materializacion incremental de transacciones clinicas vinculadas a 5 dimensiones conformadas mediante surrogate keys</td>
+<td>71+ sesiones</td>
+</tr>
+<tr>
+<td><code>fact_facturacion.sql</code></td>
+<td>stg_pagos + dims</td>
+<td>Materializacion incremental de metricas financieras; filtro <code>estado_pago = 'PAGADO'</code></td>
+<td>71 pagos cobrados</td>
+</tr>
+<tr>
+<td><code>fact_evaluacion.sql</code></td>
+<td>stg_evaluaciones + dim_diagnostico</td>
+<td>Consolidacion de evaluaciones de salud mental vinculadas a DIM_Diagnostico via <code>codigo_cie10</code></td>
+<td>15+ evaluaciones</td>
+</tr>
+</tbody>
+</table>
+<h2 id="74-evidencia-de-ejecucion">7.4 Evidencia de ejecucion<a class="headerlink" href="#74-evidencia-de-ejecucion" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Evidencia</th>
+<th>Descripcion</th>
+<th>Estado</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Ejecucion de <code>dbt run</code></td>
+<td>20 modelos ejecutados con resultado <code>PASS=20 WARN=0 ERROR=0</code></td>
+<td>Completo — ver <code>dbt/target/run_results.json</code></td>
+</tr>
+<tr>
+<td>Tablas creadas en raw</td>
+<td>9 tablas replicadas desde MySQL en el schema raw de PostgreSQL</td>
+<td>Completo — <code>\dt raw.*</code></td>
+</tr>
+<tr>
+<td>Modelos staging compilados</td>
+<td>9 modelos <code>stg_*</code> con transformaciones de limpieza aplicadas</td>
+<td>Completo</td>
+</tr>
+<tr>
+<td>Modelo intermediate ephemeral</td>
+<td><code>int_sesiones_facturadas</code> — join limpio sin tabla fisica</td>
+<td>Completo</td>
+</tr>
+<tr>
+<td>Modelos creados en datamart</td>
+<td>6 dims + 3 facts verificados en schema datamart</td>
+<td>Completo — <code>\dt datamart.*</code></td>
+</tr>
+<tr>
+<td>Topics activos en Kafka UI</td>
+<td>10 topics CDC activos en Kafka UI (:8080) — estado RUNNING</td>
+<td>Completo</td>
+</tr>
+</tbody>
+</table>
+<p>```bash</p>
+<h1 id="comando-para-ejecutar-el-pipeline-completo">Comando para ejecutar el pipeline completo<a class="headerlink" href="#comando-para-ejecutar-el-pipeline-completo" title="Permanent link">&para;</a></h1>
+<p>docker compose run --rm dbt dbt run --profiles-dir /dbt --project-dir /dbt</p>
+<h1 id="resultado-esperado">Resultado esperado<a class="headerlink" href="#resultado-esperado" title="Permanent link">&para;</a></h1>
+<h1 id="pass20-warn0-error0-skip0-total20">PASS=20  WARN=0  ERROR=0  SKIP=0  TOTAL=20<a class="headerlink" href="#pass20-warn0-error0-skip0-total20" title="Permanent link">&para;</a></h1>
+<p>```</p>
 
 
 
@@ -1258,7 +1529,7 @@
       <nav class="md-footer__inner md-grid" aria-label="Pie" >
         
           
-          <a href="../lineaje_dbt/" class="md-footer__link md-footer__link--prev" aria-label="Anterior: Lineaje dbt">
+          <a href="../06_oltp/" class="md-footer__link md-footer__link--prev" aria-label="Anterior: 6. Fuente Transaccional OLTP">
             <div class="md-footer__button md-icon">
               
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
@@ -1268,20 +1539,20 @@
                 Anterior
               </span>
               <div class="md-ellipsis">
-                Lineaje dbt
+                6. Fuente Transaccional OLTP
               </div>
             </div>
           </a>
         
         
           
-          <a href="../modelo_dimensional/" class="md-footer__link md-footer__link--next" aria-label="Siguiente: Modelo Dimensional">
+          <a href="../08_datamart/" class="md-footer__link md-footer__link--next" aria-label="Siguiente: 8. Data Warehouse y DataMart">
             <div class="md-footer__title">
               <span class="md-footer__direction">
                 Siguiente
               </span>
               <div class="md-ellipsis">
-                Modelo Dimensional
+                8. Data Warehouse y DataMart
               </div>
             </div>
             <div class="md-footer__button md-icon">
