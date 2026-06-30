@@ -1,7 +1,7 @@
 site_name: Centro Psicologico BI
-site_description: Informe tecnico del pipeline CDC, data warehouse, dbt y BI del proyecto CentroPsicologico-BI.
-site_author: Centro Psicologico BI
+site_description: Solucion BI end-to-end para el Centro Psicologico Integral Guevara — MySQL, Debezium, Kafka, PostgreSQL, dbt y Power BI.
 site_url: https://claudiob12.github.io/CentroPsicologico-BI/
+site_author: Claudio Bustinza · Josue Ochoa · Joel Huillca · Wilbert Mayta
 repo_url: https://github.com/ClaudioB12/CentroPsicologico-BI
 repo_name: ClaudioB12/CentroPsicologico-BI
 
@@ -33,13 +33,25 @@ theme:
 
 nav:
   - Inicio: index.md
-  - Informe tecnico: informe_tecnico.md
+  - Producto del Curso:
+      - 1. Datos del Proyecto: informe/01_datos_generales.md
+      - 2. Resumen Ejecutivo: informe/02_resumen_ejecutivo.md
+      - 3. Problema y Objetivo Analitico: informe/03_problema_negocio.md
+      - 4. KPIs Principales: informe/04_kpis.md
+      - 5. Arquitectura BI: informe/05_arquitectura.md
+      - 6. Fuente Transaccional OLTP: informe/06_oltp.md
+      - 7. Pipeline de Ingesta y Transformacion: informe/07_pipeline.md
+      - 8. Data Warehouse y DataMart: informe/08_datamart.md
+      - 9. Modelo Semantico Power BI: informe/09_modelo_semantico.md
+      - 10. Dashboard Interactivo: informe/10_dashboard.md
+      - 15. Sustentacion Tecnica: informe/15_sustentacion.md
   - Diagramas:
       - Arquitectura CDC y BI: diagrams/arquitectura.md
       - Lineaje dbt: diagrams/lineaje_dbt.md
       - Esquema OLTP MySQL: diagrams/oltp_schema.md
-      - Modelo dimensional: diagrams/modelo_dimensional.md
-  - Evidencia pendiente: EVIDENCIA_PENDIENTE.md
+      - Modelo Dimensional: diagrams/modelo_dimensional.md
+  - Evidencias: EVIDENCIA_PENDIENTE.md
+  - Informe tecnico: informe_tecnico.md
 
 markdown_extensions:
   - admonition

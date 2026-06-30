@@ -1,45 +1,49 @@
-# Centro Psicologico BI
+# Centro Psicologico Integral Guevara — BI End-to-End
 
-Este sitio consolida el informe tecnico del proyecto **CentroPsicologico-BI**: un pipeline de inteligencia de negocios local con CDC, dbt y Power BI para un centro psicologico.
+Sistema de Business Intelligence completo para la gestion clinica, operativa y financiera del Centro Psicologico Integral Guevara, Juliaca, Peru.
 
-## Contenido
-
-- [Informe tecnico](informe_tecnico.md): inventario del proyecto, esquema OLTP, CDC, dbt, datamart y hallazgos.
-- [Arquitectura CDC y BI](diagrams/arquitectura.md): pipeline completo MySQL → Kafka → PostgreSQL → dbt → BI e infraestructura Docker.
-- [Lineaje dbt](diagrams/lineaje_dbt.md): dependencias entre capas raw → staging → dimensiones y hechos.
-- [Esquema OLTP MySQL](diagrams/oltp_schema.md): diagrama ER del esquema operacional `dm_centro_psicologico`.
-- [Modelo dimensional](diagrams/modelo_dimensional.md): diagrama ER del datamart (esquema estrella con 3 facts y 6 dims).
-- [Evidencia pendiente](EVIDENCIA_PENDIENTE.md): checklist de capturas requeridas para completar el informe.
-
-## Resumen del pipeline
+## Pipeline implementado
 
 ```
-MySQL 8.0 (OLTP)
-  └─ Debezium CDC → Kafka → JDBC Sink
-       └─ PostgreSQL schema raw
-            └─ dbt staging (9 modelos stg_*)
-                 └─ dbt datamart (6 dims + 3 facts)
-                      └─ dbt exposures → Power BI
+MySQL 8.0 → Debezium + Kafka → PostgreSQL 15 → dbt → Power BI
 ```
+
+## Resultados validados
+
+| Metrica | Valor |
+|---|---|
+| Sesiones atendidas | 71 |
+| Ingresos brutos | S/ 8,030.00 |
+| Margen bruto promedio | 49.94% |
+| Pacientes unicos registrados | 100 |
+| Modelos dbt ejecutados | 20 (PASS=20) |
+| KPIs implementados | 13 |
+
+## Estructura del proyecto
+
+| Seccion | Descripcion |
+|---|---|
+| [Datos del Proyecto](informe/01_datos_generales.md) | Equipo, herramientas y componentes |
+| [Resumen Ejecutivo](informe/02_resumen_ejecutivo.md) | Problema, solucion y hallazgos |
+| [Problema y KPIs](informe/03_problema_negocio.md) | Problema de negocio y preguntas analiticas |
+| [KPIs Principales](informe/04_kpis.md) | 13 KPIs con formulas y criterios de interpretacion |
+| [Arquitectura BI](informe/05_arquitectura.md) | 4 capas: OLTP → CDC → DW → Power BI |
+| [Fuente OLTP](informe/06_oltp.md) | 9 tablas MySQL y su uso analitico |
+| [Pipeline de Ingesta](informe/07_pipeline.md) | CDC Debezium + Kafka + 20 modelos dbt |
+| [Data Warehouse](informe/08_datamart.md) | Modelo Constelacion con 3 facts y 6 dims |
+| [Modelo Semantico](informe/09_modelo_semantico.md) | Relaciones Power BI, DAX y jerarquias |
+| [Dashboard](informe/10_dashboard.md) | 3 tableros + comparativos YoY y MoM |
+| [Sustentacion](informe/15_sustentacion.md) | Respuestas tecnicas + estructura PPT |
+| [Evidencias](EVIDENCIA_PENDIENTE.md) | E-01 a E-18 con diagramas y consultas SQL |
 
 ## Como levantar la documentacion
 
-Instalar dependencias:
-
 ```powershell
-python -m pip install -r requirements-docs.txt
-```
-
-Ejecutar servidor local:
-
-```powershell
+pip install -r requirements-docs.txt
 mkdocs serve
 ```
 
-Generar HTML estatico:
+## Repositorio
 
-```powershell
-mkdocs build
-```
-
-El sitio generado queda en `site/`.
+- **GitHub:** [ClaudioB12/CentroPsicologico-BI](https://github.com/ClaudioB12/CentroPsicologico-BI)
+- **Equipo:** Claudio Bustinza · Josue Ochoa · Joel Huillca · Wilbert Mayta
