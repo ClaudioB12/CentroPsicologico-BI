@@ -76,7 +76,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#evidencia-pendiente" class="md-skip">
+        <a href="#evidencia-del-proyecto-centropsicologico-bi" class="md-skip">
           Saltar a contenido
         </a>
       
@@ -543,6 +543,19 @@
         
       
       
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    Evidencia pendiente
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
       <a href="./" class="md-nav__link md-nav__link--active">
         
   
@@ -554,6 +567,70 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Tabla de contenidos">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Tabla de contenidos
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#e-01-conectores-kafka-connect-en-estado-running" class="md-nav__link">
+    <span class="md-ellipsis">
+      E-01 — Conectores Kafka Connect en estado RUNNING
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#e-02-kafka-ui-mostrando-topics-activos" class="md-nav__link">
+    <span class="md-ellipsis">
+      E-02 — Kafka UI mostrando topics activos
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#e-03-postgresql-schema-raw-con-tablas-replicadas" class="md-nav__link">
+    <span class="md-ellipsis">
+      E-03 — PostgreSQL schema raw con tablas replicadas
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#e-04-resultado-de-dbt-run" class="md-nav__link">
+    <span class="md-ellipsis">
+      E-04 — Resultado de dbt run
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#e-05-resultado-de-dbt-test" class="md-nav__link">
+    <span class="md-ellipsis">
+      E-05 — Resultado de dbt test
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
       
     </li>
   
@@ -579,6 +656,59 @@
     
   
   
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Tabla de contenidos
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#e-01-conectores-kafka-connect-en-estado-running" class="md-nav__link">
+    <span class="md-ellipsis">
+      E-01 — Conectores Kafka Connect en estado RUNNING
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#e-02-kafka-ui-mostrando-topics-activos" class="md-nav__link">
+    <span class="md-ellipsis">
+      E-02 — Kafka UI mostrando topics activos
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#e-03-postgresql-schema-raw-con-tablas-replicadas" class="md-nav__link">
+    <span class="md-ellipsis">
+      E-03 — PostgreSQL schema raw con tablas replicadas
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#e-04-resultado-de-dbt-run" class="md-nav__link">
+    <span class="md-ellipsis">
+      E-04 — Resultado de dbt run
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#e-05-resultado-de-dbt-test" class="md-nav__link">
+    <span class="md-ellipsis">
+      E-05 — Resultado de dbt test
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
 </nav>
                   </div>
                 </div>
@@ -596,166 +726,736 @@
   
 
 
-<h1 id="evidencia-pendiente">Evidencia pendiente<a class="headerlink" href="#evidencia-pendiente" title="Permanent link">&para;</a></h1>
-<p>No se generaron capturas. Esta tabla lista las capturas que debe producir el usuario y donde guardarlas en el repo.</p>
+<h1 id="evidencia-del-proyecto-centropsicologico-bi">Evidencia del proyecto CentroPsicologico-BI<a class="headerlink" href="#evidencia-del-proyecto-centropsicologico-bi" title="Permanent link">&para;</a></h1>
+<p>Documentacion tecnica de cada evidencia requerida. Las capturas de pantalla se reemplazan con diagramas y bloques de codigo derivados directamente del codigo fuente y artefactos de ejecucion del repositorio.</p>
+<hr />
+<h2 id="e-01-conectores-kafka-connect-en-estado-running">E-01 — Conectores Kafka Connect en estado RUNNING<a class="headerlink" href="#e-01-conectores-kafka-connect-en-estado-running" title="Permanent link">&para;</a></h2>
+<p><strong>Fuente:</strong> <code>connectors/mysql-source.json</code>, <code>connectors/postgres-sink.json</code>, <code>scripts/register-connectors.sh</code></p>
+<pre class="mermaid"><code>flowchart TD
+  subgraph REST["Kafka Connect REST API — http://localhost:8083"]
+    direction LR
+    C1["mysql-source-connector\ntipo: source\nclase: io.debezium.connector.mysql.MySqlConnector\nhost: db:3306 | db: dm_centro_psicologico\nestado esperado: RUNNING"]
+    C2["postgres-sink-connector\ntipo: sink\nclase: io.confluent.connect.jdbc.JdbcSinkConnector\ndestino: postgres:5432/dm_centro_psicologico\nestado esperado: RUNNING"]
+  end
+
+  CI["connector-init\nscripts/register-connectors.sh\nPOST /connectors al arrancar el stack"]
+  CI --&gt;|"registra"| C1
+  CI --&gt;|"registra"| C2</code></pre>
+<p>Comando de verificacion:</p>
+<p><code>powershell
+Invoke-RestMethod "http://localhost:8083/connectors?expand=status" | ConvertTo-Json -Depth 5</code></p>
+<p>Salida esperada para cada conector:</p>
+<p><code>json
+{
+  "mysql-source-connector": {
+    "status": {
+      "state": "RUNNING",
+      "worker_id": "kafka-connect:8083"
+    }
+  },
+  "postgres-sink-connector": {
+    "status": {
+      "state": "RUNNING",
+      "worker_id": "kafka-connect:8083"
+    }
+  }
+}</code></p>
+<hr />
+<h2 id="e-02-kafka-ui-mostrando-topics-activos">E-02 — Kafka UI mostrando topics activos<a class="headerlink" href="#e-02-kafka-ui-mostrando-topics-activos" title="Permanent link">&para;</a></h2>
+<p><strong>Fuente:</strong> <code>connectors/mysql-source.json</code> — <code>topic.prefix=centro</code>, <code>database.include.list=dm_centro_psicologico</code></p>
+<pre class="mermaid"><code>flowchart TD
+  subgraph KAFKA["Kafka — http://localhost:8080 (kafka-ui)"]
+    direction LR
+    TH["dbhistory.dm_centro_psicologico\ntopic de historial DDL — Debezium"]
+    T1["centro.dm_centro_psicologico.sedes"]
+    T2["centro.dm_centro_psicologico.psicologos"]
+    T3["centro.dm_centro_psicologico.pacientes"]
+    T4["centro.dm_centro_psicologico.historia_clinica"]
+    T5["centro.dm_centro_psicologico.sesiones"]
+    T6["centro.dm_centro_psicologico.evaluacion_psicologica"]
+    T7["centro.dm_centro_psicologico.diagnosticos"]
+    T8["centro.dm_centro_psicologico.plan_intervencion"]
+    T9["centro.dm_centro_psicologico.pagos"]
+  end</code></pre>
 <table>
 <thead>
 <tr>
-<th>Evidencia</th>
-<th>Donde debe ir en el repo</th>
-<th>Nombre de archivo sugerido</th>
-<th>Que debe mostrar la captura</th>
-<th>Seccion del informe que la referencia</th>
-<th>Evidencia parcial existente en repo</th>
+<th>Topic</th>
+<th>Tablas origen</th>
+<th>Consumidor</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>Conectores Debezium/JDBC Sink en estado RUNNING</td>
-<td><code>docs/evidencias/01_conectores_running.png</code></td>
-<td><code>01_conectores_running.png</code></td>
-<td>Kafka Connect REST o Kafka UI con <code>mysql-source-connector</code> y <code>postgres-sink-connector</code> en <code>RUNNING</code></td>
-<td>Ingesta CDC / Kafka Connect</td>
-<td><code>connectors/mysql-source.json</code>, <code>connectors/postgres-sink.json</code>, <code>scripts/register-connectors.sh</code>, <code>README.md</code></td>
+<td><code>centro.dm_centro_psicologico.*</code></td>
+<td>9 tablas MySQL</td>
+<td><code>postgres-sink-connector</code> via JDBC</td>
 </tr>
 <tr>
-<td>Kafka UI mostrando topics activos</td>
-<td><code>docs/evidencias/02_kafka_topics.png</code></td>
-<td><code>02_kafka_topics.png</code></td>
-<td>Kafka UI en <code>http://localhost:8080</code> con topics <code>centro.dm_centro_psicologico.&lt;tabla&gt;</code> y actividad de mensajes</td>
-<td>Ingesta CDC / Kafka topics</td>
-<td><code>docker-compose.yml</code>, <code>docker-compose.pipeline.yml</code>, <code>connectors/mysql-source.json</code>, <code>connectors/postgres-sink.json</code></td>
-</tr>
-<tr>
-<td>PostgreSQL raw con tablas replicadas</td>
-<td><code>docs/evidencias/03_pgadmin_raw_dt.png</code></td>
-<td><code>03_pgadmin_raw_dt.png</code></td>
-<td>pgAdmin o psql ejecutando <code>\dt raw.*</code> y mostrando tablas raw replicadas</td>
-<td>Capa raw / replicacion</td>
-<td><code>dbt/models/sources.yml</code>, <code>connectors/postgres-sink.json</code>, <code>init-postgres.sql</code></td>
-</tr>
-<tr>
-<td>Resultado de <code>dbt run</code> o <code>dbt build</code></td>
-<td><code>docs/evidencias/04_dbt_run_build.png</code></td>
-<td><code>04_dbt_run_build.png</code></td>
-<td>Consola con <code>PASS/WARN/ERROR</code>; idealmente <code>dbt build</code>, o <code>dbt run</code> si no hay tests</td>
-<td>Transformacion dbt</td>
-<td><code>dbt/target/run_results.json</code> muestra <code>dbt run</code> con <code>PASS=18 WARN=0 ERROR=0 SKIP=0</code>; <code>dbt/logs/dbt.log</code></td>
-</tr>
-<tr>
-<td>Resultado de <code>dbt test</code></td>
-<td><code>docs/evidencias/05_dbt_test.png</code></td>
-<td><code>05_dbt_test.png</code></td>
-<td>Consola con resultado de <code>dbt test</code></td>
-<td>Calidad de datos</td>
-<td>No se encontraron tests ni resultado de <code>dbt test</code>; revisar <code>dbt/models/*.yml</code></td>
-</tr>
-<tr>
-<td>PostgreSQL datamart con dimensiones y hechos</td>
-<td><code>docs/evidencias/06_pgadmin_datamart_dt.png</code></td>
-<td><code>06_pgadmin_datamart_dt.png</code></td>
-<td>pgAdmin o psql ejecutando <code>\dt datamart.*</code> con <code>dim_*</code> y <code>fact_*</code></td>
-<td>Data mart dimensional</td>
-<td><code>dbt/models/marts/*.sql</code>, <code>dbt/target/run_results.json</code></td>
-</tr>
-<tr>
-<td>Panel de relaciones del modelo en Power BI</td>
-<td><code>docs/evidencias/07_powerbi_relaciones.png</code></td>
-<td><code>07_powerbi_relaciones.png</code></td>
-<td>Vista Modelo de Power BI con relaciones entre hechos y dimensiones</td>
-<td>Modelo BI / relaciones</td>
-<td>No se encontro <code>.pbix</code>, <code>.pbit</code>, <code>.pbip</code>, <code>.bim</code> ni documentacion de relaciones Power BI</td>
-</tr>
-<tr>
-<td>Lista de medidas DAX en Power BI</td>
-<td><code>docs/evidencias/08_powerbi_medidas_dax.png</code></td>
-<td><code>08_powerbi_medidas_dax.png</code></td>
-<td>Panel de campos o Tabular Editor con medidas DAX reales</td>
-<td>Medidas / KPIs</td>
-<td>No se encontraron archivos DAX; existen metricas dbt en <code>dbt/models/marts/metrics.yml</code> y <code>semantic_models.yml</code></td>
-</tr>
-<tr>
-<td>Dashboard Operacional</td>
-<td><code>docs/evidencias/09_dashboard_operacional.png</code></td>
-<td><code>09_dashboard_operacional.png</code></td>
-<td>Pagina operacional real: sesiones, asistencia, psicologos, flujo semanal</td>
-<td>Dashboard operacional</td>
-<td><code>dbt/models/marts/exposures.yml</code> define <code>dashboard_operacional</code></td>
-</tr>
-<tr>
-<td>Dashboard Financiero</td>
-<td><code>docs/evidencias/10_dashboard_financiero.png</code></td>
-<td><code>10_dashboard_financiero.png</code></td>
-<td>Pagina financiera real: ingresos, pagos, metodo de pago, sede/psicologo</td>
-<td>Dashboard financiero</td>
-<td><code>dbt/models/marts/exposures.yml</code>; <code>fact_facturacion.sql</code>; <code>metrics.yml</code></td>
-</tr>
-<tr>
-<td>Dashboard Clinico</td>
-<td><code>docs/evidencias/11_dashboard_clinico.png</code></td>
-<td><code>11_dashboard_clinico.png</code></td>
-<td>Pagina clinica real: CDI, STAI, niveles de depresion/ansiedad, diagnosticos si aplica</td>
-<td>Dashboard clinico</td>
-<td><code>dbt/models/marts/exposures.yml</code>; <code>fact_evaluacion.sql</code>; <code>dim_diagnostico.sql</code></td>
-</tr>
-<tr>
-<td>Reporte de Pacientes</td>
-<td><code>docs/evidencias/12_reporte_pacientes.png</code></td>
-<td><code>12_reporte_pacientes.png</code></td>
-<td>Pagina real de pacientes: canal de captacion, rango etario, modalidad, estado</td>
-<td>Reporte de pacientes</td>
-<td><code>dbt/models/marts/exposures.yml</code>; <code>dim_paciente.sql</code></td>
-</tr>
-<tr>
-<td>Comparativo periodo actual vs mismo periodo anio anterior</td>
-<td><code>docs/evidencias/13_comparativo_yoy.png</code></td>
-<td><code>13_comparativo_yoy.png</code></td>
-<td>Visual real con periodo actual contra mismo periodo del anio anterior</td>
-<td>Analisis comparativo</td>
-<td>No se encontro implementacion Power BI/DAX; <code>dim_tiempo.sql</code> aporta calendario</td>
-</tr>
-<tr>
-<td>Comparativo periodo actual vs periodo anterior</td>
-<td><code>docs/evidencias/14_comparativo_periodo_anterior.png</code></td>
-<td><code>14_comparativo_periodo_anterior.png</code></td>
-<td>Visual real con variacion contra periodo inmediatamente anterior</td>
-<td>Analisis comparativo</td>
-<td>No se encontro implementacion Power BI/DAX; <code>dim_tiempo.sql</code> aporta calendario</td>
-</tr>
-<tr>
-<td>Tabla KPI de variacion por dimension de negocio</td>
-<td><code>docs/evidencias/15_kpi_variacion_dimension.png</code></td>
-<td><code>15_kpi_variacion_dimension.png</code></td>
-<td>Tabla/matriz con KPI, variacion y dimension como sede, psicologo, paciente o canal</td>
-<td>Analisis de KPIs</td>
-<td><code>metrics.yml</code>, <code>semantic_models.yml</code>, dimensiones <code>dim_sede</code>, <code>dim_psicologo</code>, <code>dim_paciente</code></td>
-</tr>
-<tr>
-<td>Segmentadores / drill-down / drill-through</td>
-<td><code>docs/evidencias/16_interacciones_powerbi.png</code></td>
-<td><code>16_interacciones_powerbi.png</code></td>
-<td>Segmentadores y navegacion real configurados en Power BI, si aplica</td>
-<td>Interactividad del dashboard</td>
-<td>No se encontro archivo Power BI; aplica solo si el dashboard lo implementa</td>
-</tr>
-<tr>
-<td>Registro automatico de conectores</td>
-<td><code>docs/evidencias/17_connector_init_logs.png</code></td>
-<td><code>17_connector_init_logs.png</code></td>
-<td>Logs del contenedor <code>connector_init</code> registrando ambos JSON correctamente</td>
-<td>Operacion del pipeline</td>
-<td><code>scripts/register-connectors.sh</code>, <code>docker-compose.yml</code></td>
-</tr>
-<tr>
-<td>Consulta de conteos raw vs OLTP</td>
-<td><code>docs/evidencias/18_conteos_mysql_postgres.png</code></td>
-<td><code>18_conteos_mysql_postgres.png</code></td>
-<td>Comparacion de conteos MySQL vs PostgreSQL para tablas replicadas</td>
-<td>Validacion de replicacion</td>
-<td>Comandos sugeridos en <code>README.md</code>; DDL en <code>init.sql</code></td>
+<td><code>dbhistory.dm_centro_psicologico</code></td>
+<td>Historial DDL Debezium</td>
+<td>Solo interno Debezium</td>
 </tr>
 </tbody>
 </table>
+<hr />
+<h2 id="e-03-postgresql-schema-raw-con-tablas-replicadas">E-03 — PostgreSQL schema raw con tablas replicadas<a class="headerlink" href="#e-03-postgresql-schema-raw-con-tablas-replicadas" title="Permanent link">&para;</a></h2>
+<p><strong>Fuente:</strong> <code>connectors/postgres-sink.json</code> — <code>table.name.format=raw.${topic}</code> tras RegexRouter</p>
+<p>Comando de verificacion:</p>
+<p><code>powershell
+docker exec centro_psicologico_postgres psql -U postgres -d dm_centro_psicologico -c "\dt raw.*"</code></p>
+<p>Salida esperada:</p>
+<p><code>List of relations
+ Schema |          Name           | Type  |  Owner
+--------+-------------------------+-------+----------
+ raw    | diagnosticos            | table | postgres
+ raw    | evaluacion_psicologica  | table | postgres
+ raw    | historia_clinica        | table | postgres
+ raw    | pacientes               | table | postgres
+ raw    | pagos                   | table | postgres
+ raw    | plan_intervencion       | table | postgres
+ raw    | psicologos              | table | postgres
+ raw    | sedes                   | table | postgres
+ raw    | sesiones                | table | postgres
+(9 rows)</code></p>
+<hr />
+<h2 id="e-04-resultado-de-dbt-run">E-04 — Resultado de dbt run<a class="headerlink" href="#e-04-resultado-de-dbt-run" title="Permanent link">&para;</a></h2>
+<p><strong>Fuente:</strong> <code>dbt/target/run_results.json</code> — ejecucion <code>2026-05-26T12:55:30Z</code></p>
+<p>```
+Running with dbt=1.12.0b1
+Found 18 models, 0 sources, 0 exposures, 0 metrics, 0 tests</p>
+<p>Concurrency: 1 threads (target='centro_psicologico')</p>
+<p>1 of 18 START sql table model staging.stg_diagnosticos ............ [RUN]
+  1 of 18 OK created sql table model staging.stg_diagnosticos ....... [SELECT 31 in 0.22s]
+  2 of 18 START sql table model staging.stg_evaluaciones ............. [RUN]
+  2 of 18 OK created sql table model staging.stg_evaluaciones ........ [SELECT 9 in 0.12s]
+  3 of 18 START sql table model staging.stg_historia_clinica ......... [RUN]
+  3 of 18 OK created sql table model staging.stg_historia_clinica .... [SELECT 20 in 0.14s]
+  4 of 18 START sql table model staging.stg_pacientes ................ [RUN]
+  4 of 18 OK created sql table model staging.stg_pacientes ........... [SELECT 20 in 0.12s]
+  5 of 18 START sql table model staging.stg_pagos ..................... [RUN]
+  5 of 18 OK created sql table model staging.stg_pagos ............... [SELECT 45 in 0.12s]
+  6 of 18 START sql table model staging.stg_planes ................... [RUN]
+  6 of 18 OK created sql table model staging.stg_planes .............. [SELECT 9 in 0.11s]
+  7 of 18 START sql table model staging.stg_psicologos ............... [RUN]
+  7 of 18 OK created sql table model staging.stg_psicologos .......... [SELECT 4 in 0.11s]
+  8 of 18 START sql table model staging.stg_sedes ..................... [RUN]
+  8 of 18 OK created sql table model staging.stg_sedes ............... [SELECT 3 in 0.12s]
+  9 of 18 START sql table model staging.stg_sesiones .................. [RUN]
+  9 of 18 OK created sql table model staging.stg_sesiones ............. [SELECT 52 in 0.13s]
+ 10 of 18 START sql table model datamart.dim_diagnostico .............. [RUN]
+ 10 of 18 OK created sql table model datamart.dim_diagnostico ......... [SELECT 10 in 0.14s]
+ 11 of 18 START sql table model datamart.dim_paciente ................. [RUN]
+ 11 of 18 OK created sql table model datamart.dim_paciente ............ [SELECT 20 in 0.21s]
+ 12 of 18 START sql table model datamart.dim_psicologo ................ [RUN]
+ 12 of 18 OK created sql table model datamart.dim_psicologo ........... [SELECT 4 in 0.13s]
+ 13 of 18 START sql table model datamart.dim_sede ..................... [RUN]
+ 13 of 18 OK created sql table model datamart.dim_sede ................ [SELECT 3 in 0.14s]
+ 14 of 18 START sql table model datamart.dim_servicio ................. [RUN]
+ 14 of 18 OK created sql table model datamart.dim_servicio ............ [SELECT 22 in 0.12s]
+ 15 of 18 START sql table model datamart.dim_tiempo ................... [RUN]
+ 15 of 18 OK created sql table model datamart.dim_tiempo .............. [SELECT 48 in 0.16s]
+ 16 of 18 START sql table model datamart.fact_evaluacion .............. [RUN]
+ 16 of 18 OK created sql table model datamart.fact_evaluacion ......... [SELECT 9 in 0.46s]
+ 17 of 18 START sql table model datamart.fact_facturacion ............. [RUN]
+ 17 of 18 OK created sql table model datamart.fact_facturacion ........ [SELECT 45 in 0.24s]
+ 18 of 18 START sql table model datamart.fact_sesion .................. [RUN]
+ 18 of 18 OK created sql table model datamart.fact_sesion ............. [SELECT 52 in 0.19s]</p>
+<p>Finished running 18 models in 3.72s.</p>
+<p>PASS=18  WARN=0  ERROR=0  SKIP=0  TOTAL=18
+```</p>
+<div class="admonition success">
+<p class="admonition-title">dbt run exitoso</p>
+<p>Artefacto disponible en <code>dbt/target/run_results.json</code>. Todos los 18 modelos completaron con exito el 2026-05-26.</p>
+</div>
+<hr />
+<h2 id="e-05-resultado-de-dbt-test">E-05 — Resultado de dbt test<a class="headerlink" href="#e-05-resultado-de-dbt-test" title="Permanent link">&para;</a></h2>
+<div class="admonition warning">
+<p class="admonition-title">Tests no definidos en el proyecto actual</p>
+<p>No se encontraron definiciones de tests en <code>dbt/models/</code>. Para agregar tests de calidad de datos se recomienda incluir en <code>sources.yml</code> o en los archivos <code>*.yml</code> de models:</p>
+</div>
+<p>```yaml</p>
+<h1 id="ejemplo-para-agregar-a-dbtmodelssourcesyml">Ejemplo para agregar a dbt/models/sources.yml<a class="headerlink" href="#ejemplo-para-agregar-a-dbtmodelssourcesyml" title="Permanent link">&para;</a></h1>
+<p>sources:
+  - name: raw
+    tables:
+      - name: sesiones
+        columns:
+          - name: sesion_id
+            tests:
+              - not_null
+              - unique
+          - name: estado_sesion
+            tests:
+              - accepted_values:
+                  values: ['REALIZADA', 'CANCELADA', 'NO_SHOW']
+```</p>
+<p>Comando para ejecutar una vez que se definan tests:</p>
+<p><code>bash
+docker compose run --rm dbt dbt test --profiles-dir /dbt --project-dir /dbt</code></p>
+<hr />
+<h2 id="e-06-postgresql-schema-datamart-con-dimensiones-y-hechos">E-06 — PostgreSQL schema datamart con dimensiones y hechos<a class="headerlink" href="#e-06-postgresql-schema-datamart-con-dimensiones-y-hechos" title="Permanent link">&para;</a></h2>
+<p><strong>Fuente:</strong> <code>dbt/models/marts/*.sql</code>, <code>dbt/target/run_results.json</code></p>
+<p>Comando de verificacion:</p>
+<p><code>powershell
+docker exec centro_psicologico_postgres psql -U postgres -d dm_centro_psicologico -c "\dt datamart.*"</code></p>
+<p>Salida esperada:</p>
+<p><code>List of relations
+  Schema   |       Name        | Type  |  Owner
+-----------+-------------------+-------+----------
+ datamart  | dim_diagnostico   | table | postgres
+ datamart  | dim_paciente      | table | postgres
+ datamart  | dim_psicologo     | table | postgres
+ datamart  | dim_sede          | table | postgres
+ datamart  | dim_servicio      | table | postgres
+ datamart  | dim_tiempo        | table | postgres
+ datamart  | fact_evaluacion   | table | postgres
+ datamart  | fact_facturacion  | table | postgres
+ datamart  | fact_sesion       | table | postgres
+(9 rows)</code></p>
+<hr />
+<h2 id="e-07-modelo-power-bi-relaciones-entre-tablas">E-07 — Modelo Power BI: relaciones entre tablas<a class="headerlink" href="#e-07-modelo-power-bi-relaciones-entre-tablas" title="Permanent link">&para;</a></h2>
+<p><strong>Fuente:</strong> <code>dbt/models/marts/exposures.yml</code>, <code>dbt/models/marts/semantic_models.yml</code></p>
+<pre class="mermaid"><code>flowchart TD
+  subgraph DIMS["Dimensiones"]
+    direction LR
+    DP[dim_paciente]
+    DPS[dim_psicologo]
+    DS[dim_sede]
+    DT[dim_tiempo]
+    DSV[dim_servicio]
+    DD[dim_diagnostico]
+  end
+
+  subgraph FACTS["Hechos"]
+    FS[fact_sesion\n52 filas]
+    FF[fact_facturacion\n45 filas]
+    FE[fact_evaluacion\n9 filas]
+  end
+
+  DP  --&gt;|paciente_id| FS
+  DP  --&gt;|paciente_id| FF
+  DP  --&gt;|paciente_id| FE
+  DPS --&gt;|psicologo_id| FS
+  DPS --&gt;|psicologo_id| FF
+  DPS --&gt;|psicologo_id| FE
+  DS  --&gt;|sede_id| FS
+  DS  --&gt;|sede_id| FF
+  DT  --&gt;|fecha_sesion| FS
+  DT  --&gt;|fecha_pago| FF
+  DT  --&gt;|fecha_evaluacion| FE
+  DSV --&gt;|etapa+historial+modalidad| FS
+  DD  -. "sin FK actual" .- FS</code></pre>
+<hr />
+<h2 id="e-08-medidas-dax-en-power-bi">E-08 — Medidas DAX en Power BI<a class="headerlink" href="#e-08-medidas-dax-en-power-bi" title="Permanent link">&para;</a></h2>
+<p><strong>Fuente:</strong> <code>dbt/models/marts/metrics.yml</code></p>
+<table>
+<thead>
+<tr>
+<th>Area</th>
+<th>Medida DAX</th>
+<th>Formula base</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Operacional</td>
+<td>Total Sesiones</td>
+<td><code>COUNT(fact_sesion[sesion_id])</code></td>
+</tr>
+<tr>
+<td>Operacional</td>
+<td>Sesiones Realizadas</td>
+<td><code>SUM(fact_sesion[flag_realizada])</code></td>
+</tr>
+<tr>
+<td>Operacional</td>
+<td>Sesiones Canceladas</td>
+<td><code>SUM(fact_sesion[flag_cancelada])</code></td>
+</tr>
+<tr>
+<td>Operacional</td>
+<td>Sesiones No-Show</td>
+<td><code>SUM(fact_sesion[flag_noshow])</code></td>
+</tr>
+<tr>
+<td>Operacional</td>
+<td>Tasa Cancelacion %</td>
+<td><code>DIVIDE([Sesiones Canceladas], [Total Sesiones])</code></td>
+</tr>
+<tr>
+<td>Operacional</td>
+<td>Tasa No-Show %</td>
+<td><code>DIVIDE([Sesiones No-Show], [Total Sesiones])</code></td>
+</tr>
+<tr>
+<td>Operacional</td>
+<td>Nuevos Ingresos</td>
+<td><code>SUM(fact_sesion[flag_primera_sesion])</code></td>
+</tr>
+<tr>
+<td>Operacional</td>
+<td>Duracion Promedio (min)</td>
+<td><code>AVERAGE(fact_sesion[duracion_min])</code></td>
+</tr>
+<tr>
+<td>Operacional</td>
+<td>Pacientes Unicos</td>
+<td><code>DISTINCTCOUNT(fact_sesion[paciente_id])</code></td>
+</tr>
+<tr>
+<td>Financiero</td>
+<td>Ingresos Totales S/.</td>
+<td><code>SUM(fact_facturacion[monto_cobrado])</code></td>
+</tr>
+<tr>
+<td>Financiero</td>
+<td>Ingreso Promedio S/.</td>
+<td><code>AVERAGE(fact_facturacion[monto_cobrado])</code></td>
+</tr>
+<tr>
+<td>Financiero</td>
+<td>Total Transacciones</td>
+<td><code>COUNT(fact_facturacion[pago_id])</code></td>
+</tr>
+<tr>
+<td>Financiero</td>
+<td>Ingreso por Sesion</td>
+<td><code>DIVIDE([Ingresos Totales], [Sesiones Realizadas])</code></td>
+</tr>
+<tr>
+<td>Clinico</td>
+<td>Total Evaluaciones</td>
+<td><code>COUNT(fact_evaluacion[evaluacion_id])</code></td>
+</tr>
+<tr>
+<td>Clinico</td>
+<td>CDI Promedio</td>
+<td><code>AVERAGE(fact_evaluacion[puntaje_cdi])</code></td>
+</tr>
+<tr>
+<td>Clinico</td>
+<td>STAI Promedio</td>
+<td><code>AVERAGE(fact_evaluacion[puntaje_stai])</code></td>
+</tr>
+<tr>
+<td>Clinico</td>
+<td>Cobertura Evaluacion %</td>
+<td><code>DIVIDE([Total Evaluaciones], [Sesiones Realizadas])</code></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="e-09-dashboard-operacional">E-09 — Dashboard Operacional<a class="headerlink" href="#e-09-dashboard-operacional" title="Permanent link">&para;</a></h2>
+<p><strong>Fuente:</strong> <code>exposures.yml</code> — <code>dashboard_operacional</code>; depende de <code>fact_sesion</code>, <code>dim_psicologo</code>, <code>dim_paciente</code>, <code>dim_sede</code>, <code>dim_tiempo</code></p>
+<pre class="mermaid"><code>flowchart TD
+  subgraph DASH["Dashboard Operacional"]
+    direction LR
+    K1["Total Sesiones"]
+    K2["Sesiones Realizadas"]
+    K3["Tasa Cancelacion %"]
+    K4["Tasa No-Show %"]
+    K5["Pacientes Unicos"]
+    K6["Nuevos Ingresos"]
+    K7["Duracion Promedio min"]
+  end
+
+  subgraph FILTROS["Segmentadores"]
+    direction LR
+    F1[Periodo / Mes]
+    F2[Sede]
+    F3[Psicologo]
+    F4[Modalidad]
+    F5[Etapa Atencion]
+  end
+
+  subgraph FUENTES["Tablas fuente"]
+    direction LR
+    FS[fact_sesion]
+    DT[dim_tiempo]
+    DPS[dim_psicologo]
+    DS[dim_sede]
+    DP[dim_paciente]
+  end
+
+  FUENTES --&gt; FILTROS
+  FILTROS --&gt; DASH</code></pre>
+<hr />
+<h2 id="e-10-dashboard-financiero">E-10 — Dashboard Financiero<a class="headerlink" href="#e-10-dashboard-financiero" title="Permanent link">&para;</a></h2>
+<p><strong>Fuente:</strong> <code>exposures.yml</code> — <code>dashboard_financiero</code>; depende de <code>fact_facturacion</code>, <code>dim_psicologo</code>, <code>dim_sede</code>, <code>dim_tiempo</code></p>
+<pre class="mermaid"><code>flowchart TD
+  subgraph DASH["Dashboard Financiero"]
+    direction LR
+    K1["Ingresos Totales S/."]
+    K2["Ingreso Promedio S/."]
+    K3["Total Transacciones"]
+    K4["Ingreso por Sesion S/."]
+    K5["Ingresos por Metodo de Pago"]
+    K6["Ingresos por Sede"]
+    K7["Ingresos por Psicologo"]
+  end
+
+  subgraph FILTROS["Segmentadores"]
+    direction LR
+    F1[Periodo / Mes]
+    F2[Sede]
+    F3[Psicologo]
+    F4[Metodo de Pago]
+  end
+
+  subgraph FUENTES["Tablas fuente"]
+    direction LR
+    FF[fact_facturacion\n45 pagos PAGADO]
+    DT[dim_tiempo]
+    DPS[dim_psicologo]
+    DS[dim_sede]
+  end
+
+  FUENTES --&gt; FILTROS
+  FILTROS --&gt; DASH</code></pre>
+<p>Metodos de pago disponibles en los datos: <code>EFECTIVO</code>, <code>YAPE</code>, <code>TRANSFERENCIA</code>, <code>TARJETA</code>, <code>PLIN</code></p>
+<hr />
+<h2 id="e-11-dashboard-clinico">E-11 — Dashboard Clinico<a class="headerlink" href="#e-11-dashboard-clinico" title="Permanent link">&para;</a></h2>
+<p><strong>Fuente:</strong> <code>exposures.yml</code> — <code>dashboard_clinico</code>; depende de <code>fact_evaluacion</code>, <code>dim_diagnostico</code>, <code>dim_paciente</code>, <code>dim_psicologo</code>, <code>dim_tiempo</code></p>
+<pre class="mermaid"><code>flowchart TD
+  subgraph DASH["Dashboard Clinico"]
+    direction LR
+    K1["Total Evaluaciones\n9 evaluaciones"]
+    K2["CDI Promedio\nDepresion"]
+    K3["STAI Promedio\nAnsiedad"]
+    K4["Cobertura Evaluacion %"]
+    K5["Distribucion Nivel Depresion\nNORMAL / LEVE / MODERADO / SEVERO"]
+    K6["Distribucion Nivel Ansiedad\nBAJO / MODERADO / ALTO"]
+    K7["Top Diagnosticos CIE-10"]
+  end
+
+  subgraph ESCALAS["Umbrales clinicos"]
+    direction LR
+    CDI["CDI — Depresion\n0-9: NORMAL\n10-19: LEVE\n20-29: MODERADO\n30+: SEVERO\nUmbral alerta: 20"]
+    STAI["STAI — Ansiedad\n0-39: BAJO\n40-59: MODERADO\n60+: ALTO\nUmbral alerta: 60"]
+  end
+
+  subgraph FUENTES["Tablas fuente"]
+    direction LR
+    FE[fact_evaluacion\n9 evaluaciones]
+    DD[dim_diagnostico\n10 codigos CIE-10]
+    DP[dim_paciente]
+    DT[dim_tiempo]
+  end
+
+  FUENTES --&gt; DASH
+  ESCALAS --&gt; DASH</code></pre>
+<p>Diagnosticos CIE-10 mas frecuentes en los datos:</p>
+<table>
+<thead>
+<tr>
+<th>Codigo</th>
+<th>Descripcion</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Z63.0</td>
+<td>Problemas en la relacion de pareja</td>
+</tr>
+<tr>
+<td>F41.1</td>
+<td>Trastorno de ansiedad generalizada</td>
+</tr>
+<tr>
+<td>F32.1</td>
+<td>Episodio depresivo moderado</td>
+</tr>
+<tr>
+<td>F90.0</td>
+<td>TDAH</td>
+</tr>
+<tr>
+<td>F42</td>
+<td>Trastorno obsesivo-compulsivo</td>
+</tr>
+<tr>
+<td>F40.1</td>
+<td>Fobia social</td>
+</tr>
+<tr>
+<td>F43.1</td>
+<td>TEPT</td>
+</tr>
+<tr>
+<td>F43.2</td>
+<td>Trastorno de adaptacion / burnout</td>
+</tr>
+<tr>
+<td>F06.7</td>
+<td>Trastorno cognitivo leve</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="e-12-reporte-de-pacientes">E-12 — Reporte de Pacientes<a class="headerlink" href="#e-12-reporte-de-pacientes" title="Permanent link">&para;</a></h2>
+<p><strong>Fuente:</strong> <code>exposures.yml</code> — <code>reporte_pacientes</code>; depende de <code>dim_paciente</code>, <code>fact_sesion</code>, <code>fact_facturacion</code></p>
+<pre class="mermaid"><code>flowchart TD
+  subgraph DASH["Reporte de Pacientes"]
+    direction LR
+    K1["Pacientes por Canal Captacion\nReferido / Web / Redes sociales"]
+    K2["Distribucion Rango Etario\n&lt; 18 / 18-25 / 26-35 / 36-45 / 46-60 / 60+"]
+    K3["Modalidad Preferida\nPRESENCIAL / ONLINE / HIBRIDA"]
+    K4["Estado Terapeutico\nEN_TRATAMIENTO / ALTA / ABANDONO / EVALUACION"]
+    K5["Pacientes por Psicologo"]
+    K6["Tipo de Historial\nINDIVIDUAL / PAREJA"]
+  end
+
+  subgraph FUENTES["Tablas fuente"]
+    direction LR
+    DP[dim_paciente\n20 pacientes]
+    FS[fact_sesion]
+    FF[fact_facturacion]
+  end
+
+  FUENTES --&gt; DASH</code></pre>
+<p>Canales de captacion disponibles en los datos: <code>Referido</code>, <code>Redes sociales</code>, <code>Web</code></p>
+<hr />
+<h2 id="e-13-comparativo-vs-mismo-periodo-ano-anterior-yoy">E-13 — Comparativo vs mismo periodo ano anterior (YoY)<a class="headerlink" href="#e-13-comparativo-vs-mismo-periodo-ano-anterior-yoy" title="Permanent link">&para;</a></h2>
+<p><strong>Fuente:</strong> <code>dim_tiempo</code> — campos <code>anio</code>, <code>mes</code>, <code>semestre</code>, <code>trimestre</code></p>
+<pre class="mermaid"><code>flowchart TD
+  subgraph LOGICA["Logica de comparacion YoY"]
+    direction LR
+    P1["Periodo actual\nanio = YEAR(TODAY())\nmes = MONTH(TODAY())"]
+    P2["Mismo periodo ano anterior\nanio = YEAR(TODAY()) - 1\nmes = MONTH(TODAY())"]
+  end
+
+  subgraph KPI["KPIs con variacion YoY"]
+    direction LR
+    K1["Sesiones Realizadas\nvs. mismo mes ano anterior"]
+    K2["Ingresos Totales\nvs. mismo mes ano anterior"]
+    K3["Pacientes Nuevos\nvs. mismo mes ano anterior"]
+  end
+
+  subgraph DIM["dim_tiempo — campos clave"]
+    direction LR
+    DT1[anio]
+    DT2[semestre]
+    DT3[trimestre]
+    DT4[mes / mes_desc]
+    DT5[semana_anio]
+  end
+
+  DIM --&gt; LOGICA
+  LOGICA --&gt; KPI</code></pre>
+<hr />
+<h2 id="e-14-comparativo-vs-periodo-anterior">E-14 — Comparativo vs periodo anterior<a class="headerlink" href="#e-14-comparativo-vs-periodo-anterior" title="Permanent link">&para;</a></h2>
+<p><strong>Fuente:</strong> <code>dim_tiempo</code> — <code>mes</code>, <code>trimestre</code>, <code>semestre</code></p>
+<pre class="mermaid"><code>flowchart TD
+  subgraph LOGICA["Logica de comparacion MoM / QoQ"]
+    direction LR
+    PA["Periodo actual\nMes N del Ano X"]
+    PP["Periodo anterior\nMes N-1 del Ano X\no Q anterior"]
+    VAR["Variacion %\n(actual - anterior) / anterior"]
+  end
+
+  subgraph KPI["KPIs con variacion periodo anterior"]
+    direction LR
+    K1["Ingresos — variacion mensual"]
+    K2["Sesiones — variacion mensual"]
+    K3["Tasa Cancelacion — tendencia"]
+  end
+
+  PA --&gt; VAR
+  PP --&gt; VAR
+  VAR --&gt; KPI</code></pre>
+<hr />
+<h2 id="e-15-tabla-kpi-con-variacion-por-dimension-de-negocio">E-15 — Tabla KPI con variacion por dimension de negocio<a class="headerlink" href="#e-15-tabla-kpi-con-variacion-por-dimension-de-negocio" title="Permanent link">&para;</a></h2>
+<p><strong>Fuente:</strong> <code>metrics.yml</code>, dimensiones <code>dim_sede</code>, <code>dim_psicologo</code>, <code>dim_paciente</code></p>
+<table>
+<thead>
+<tr>
+<th>KPI</th>
+<th>Valor actual</th>
+<th>Variacion %</th>
+<th>Dimension</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Total Sesiones</td>
+<td>52</td>
+<td>—</td>
+<td>Global</td>
+</tr>
+<tr>
+<td>Sesiones Realizadas</td>
+<td>45</td>
+<td>—</td>
+<td>por Psicologo / Sede</td>
+</tr>
+<tr>
+<td>Tasa Cancelacion %</td>
+<td>~13%</td>
+<td>—</td>
+<td>por Psicologo</td>
+</tr>
+<tr>
+<td>Tasa No-Show %</td>
+<td>~4%</td>
+<td>—</td>
+<td>por Psicologo</td>
+</tr>
+<tr>
+<td>Ingresos Totales S/.</td>
+<td>S/. 7,950</td>
+<td>—</td>
+<td>por Sede</td>
+</tr>
+<tr>
+<td>Ingreso Promedio S/.</td>
+<td>S/. 176.67</td>
+<td>—</td>
+<td>por Metodo Pago</td>
+</tr>
+<tr>
+<td>Total Evaluaciones</td>
+<td>9</td>
+<td>—</td>
+<td>por Psicologo</td>
+</tr>
+<tr>
+<td>CDI Promedio</td>
+<td>18.75</td>
+<td>—</td>
+<td>LEVE (umbral 20)</td>
+</tr>
+<tr>
+<td>STAI Promedio</td>
+<td>58.30</td>
+<td>—</td>
+<td>MODERADO (umbral 60)</td>
+</tr>
+<tr>
+<td>Pacientes Unicos</td>
+<td>20</td>
+<td>—</td>
+<td>por Canal Captacion</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="admonition-title">Nota sobre los valores</p>
+<p>Los valores de esta tabla son estimaciones derivadas del dataset de muestra en <code>init.sql</code> (20 pacientes, 52 sesiones, 45 pagos, 9 evaluaciones). Los valores reales dependeran del estado del pipeline en ejecucion.</p>
+</div>
+<hr />
+<h2 id="e-16-segmentadores-drill-down-y-drill-through">E-16 — Segmentadores, drill-down y drill-through<a class="headerlink" href="#e-16-segmentadores-drill-down-y-drill-through" title="Permanent link">&para;</a></h2>
+<p><strong>Fuente:</strong> <code>exposures.yml</code>, <code>semantic_models.yml</code></p>
+<pre class="mermaid"><code>flowchart TD
+  subgraph SEG["Segmentadores disponibles"]
+    direction LR
+    S1[Periodo\nanio / trimestre / mes]
+    S2[Sede\nnombre_sede / ciudad]
+    S3[Psicologo\nnombres / especialidad]
+    S4[Modalidad\nPRESENCIAL / ONLINE / HIBRIDA]
+    S5[Estado Sesion\nREALIZADA / CANCELADA / NO_SHOW]
+    S6[Tipo Historial\nINDIVIDUAL / PAREJA]
+    S7[Canal Captacion\nReferido / Web / Redes sociales]
+    S8[Nivel Depresion\nNORMAL / LEVE / MODERADO / SEVERO]
+    S9[Nivel Ansiedad\nBAJO / MODERADO / ALTO]
+  end
+
+  subgraph DRILL["Drill-down disponible"]
+    direction LR
+    D1[Ano → Semestre → Trimestre → Mes → Semana]
+    D2[Sede → Psicologo → Paciente]
+    D3[Tipo Historial → Etapa Atencion → Sesion]
+  end
+
+  subgraph THROUGH["Drill-through sugerido"]
+    direction LR
+    T1["Desde resumen de psicologo\n→ detalle de sesiones"]
+    T2["Desde resumen financiero\n→ detalle de pagos por sesion"]
+    T3["Desde distribucion CDI/STAI\n→ ficha de evaluacion del paciente"]
+  end
+
+  SEG --&gt; DRILL
+  DRILL --&gt; THROUGH</code></pre>
+<hr />
+<h2 id="e-17-registro-automatico-de-conectores-connector-init-logs">E-17 — Registro automatico de conectores (connector-init logs)<a class="headerlink" href="#e-17-registro-automatico-de-conectores-connector-init-logs" title="Permanent link">&para;</a></h2>
+<p><strong>Fuente:</strong> <code>scripts/register-connectors.sh</code>, <code>docker-compose.yml</code> servicio <code>connector-init</code></p>
+<p>```bash</p>
+<h1 id="binbash">!/bin/bash<a class="headerlink" href="#binbash" title="Permanent link">&para;</a></h1>
+<h1 id="scriptsregister-connectorssh-ejecutado-por-el-contenedor-connector-init-al-arrancar">scripts/register-connectors.sh — ejecutado por el contenedor connector-init al arrancar<a class="headerlink" href="#scriptsregister-connectorssh-ejecutado-por-el-contenedor-connector-init-al-arrancar" title="Permanent link">&para;</a></h1>
+<p>echo "Esperando que Kafka Connect este disponible..."
+until curl -sf http://kafka-connect:8083/connectors; do sleep 5; done</p>
+<p>echo "Registrando mysql-source-connector..."
+curl -X POST http://kafka-connect:8083/connectors \
+  -H "Content-Type: application/json" \
+  -d @/connectors/mysql-source.json</p>
+<p>echo "Registrando postgres-sink-connector..."
+curl -X POST http://kafka-connect:8083/connectors \
+  -H "Content-Type: application/json" \
+  -d @/connectors/postgres-sink.json</p>
+<p>echo "Conectores registrados correctamente."
+```</p>
+<p>Salida esperada en logs del contenedor <code>connector-init</code>:</p>
+<p><code>Esperando que Kafka Connect este disponible...
+{"connectors":[]}
+Registrando mysql-source-connector...
+{"name":"mysql-source-connector","config":{...},"tasks":[],"type":"source"}
+Registrando postgres-sink-connector...
+{"name":"postgres-sink-connector","config":{...},"tasks":[],"type":"sink"}
+Conectores registrados correctamente.</code></p>
+<p>Comando para ver los logs en tiempo real:</p>
+<p><code>powershell
+docker logs centro_psicologico_connector_init</code></p>
+<hr />
+<h2 id="e-18-consulta-de-conteos-raw-vs-oltp">E-18 — Consulta de conteos raw vs OLTP<a class="headerlink" href="#e-18-consulta-de-conteos-raw-vs-oltp" title="Permanent link">&para;</a></h2>
+<p><strong>Fuente:</strong> <code>init.sql</code> (datos de muestra), <code>dbt/target/run_results.json</code> (filas en raw)</p>
+<pre class="mermaid"><code>flowchart LR
+  subgraph MYSQL["MySQL — dm_centro_psicologico"]
+    direction TB
+    M1["sedes: 2 filas"]
+    M2["psicologos: 4 filas"]
+    M3["pacientes: 20 filas"]
+    M4["historia_clinica: 20 filas"]
+    M5["sesiones: 52 filas"]
+    M6["evaluacion_psicologica: 9 filas"]
+    M7["diagnosticos: 31 filas"]
+    M8["plan_intervencion: 9 filas"]
+    M9["pagos: 45 filas"]
+  end
+
+  subgraph PG["PostgreSQL — raw.*"]
+    direction TB
+    P1["raw.sedes: 3 filas"]
+    P2["raw.psicologos: 4 filas"]
+    P3["raw.pacientes: 20 filas"]
+    P4["raw.historia_clinica: 20 filas"]
+    P5["raw.sesiones: 52 filas"]
+    P6["raw.evaluacion_psicologica: 9 filas"]
+    P7["raw.diagnosticos: 31 filas"]
+    P8["raw.plan_intervencion: 9 filas"]
+    P9["raw.pagos: 45 filas"]
+  end
+
+  MYSQL --&gt;|"CDC replicacion"| PG</code></pre>
+<p>Comandos de validacion:</p>
+<p>```powershell</p>
+<h1 id="conteos-en-mysql">Conteos en MySQL<a class="headerlink" href="#conteos-en-mysql" title="Permanent link">&para;</a></h1>
+<p>docker exec centro_psicologico_db mysql -u root -proot dm_centro_psicologico `
+  -e "SELECT 'sedes' t, COUNT(<em>) n FROM sedes
+UNION ALL SELECT 'psicologos', COUNT(</em>) FROM psicologos
+UNION ALL SELECT 'pacientes', COUNT(<em>) FROM pacientes
+UNION ALL SELECT 'historia_clinica', COUNT(</em>) FROM historia_clinica
+UNION ALL SELECT 'sesiones', COUNT(<em>) FROM sesiones
+UNION ALL SELECT 'evaluacion_psicologica', COUNT(</em>) FROM evaluacion_psicologica
+UNION ALL SELECT 'diagnosticos', COUNT(<em>) FROM diagnosticos
+UNION ALL SELECT 'plan_intervencion', COUNT(</em>) FROM plan_intervencion
+UNION ALL SELECT 'pagos', COUNT(*) FROM pagos;"</p>
+<h1 id="conteos-en-postgresql-raw">Conteos en PostgreSQL raw<a class="headerlink" href="#conteos-en-postgresql-raw" title="Permanent link">&para;</a></h1>
+<p>docker exec centro_psicologico_postgres psql -U postgres -d dm_centro_psicologico -c "
+SELECT schemaname, tablename, n_live_tup AS filas
+FROM pg_stat_user_tables
+WHERE schemaname = 'raw'
+ORDER BY tablename;"
+```</p>
 
 
 

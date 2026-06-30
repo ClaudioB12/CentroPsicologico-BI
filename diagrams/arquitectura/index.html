@@ -699,32 +699,23 @@
 
 <h1 id="arquitectura-cdc-y-bi">Arquitectura CDC y BI<a class="headerlink" href="#arquitectura-cdc-y-bi" title="Permanent link">&para;</a></h1>
 <h2 id="pipeline-completo-mysql-kafka-postgresql-dbt-bi">Pipeline completo: MySQL → Kafka → PostgreSQL → dbt → BI<a class="headerlink" href="#pipeline-completo-mysql-kafka-postgresql-dbt-bi" title="Permanent link">&para;</a></h2>
-<pre class="mermaid"><code>flowchart LR
-  subgraph OLTP["MySQL 8.0 — dm_centro_psicologico (db:3306)"]
-    MYSQL[(dm_centro_psicologico)]
-    T_SEDES[sedes]
-    T_PSICOLOGOS[psicologos]
-    T_PACIENTES[pacientes]
-    T_HISTORIA[historia_clinica]
-    T_SESIONES[sesiones]
-    T_EVAL[evaluacion_psicologica]
-    T_DIAG[diagnosticos]
-    T_PLANES[plan_intervencion]
-    T_PAGOS[pagos]
-    MYSQL --&gt; T_SEDES &amp; T_PSICOLOGOS &amp; T_PACIENTES
-    MYSQL --&gt; T_HISTORIA &amp; T_SESIONES
-    MYSQL --&gt; T_EVAL &amp; T_DIAG &amp; T_PLANES &amp; T_PAGOS
+<pre class="mermaid"><code>flowchart TD
+  subgraph OLTP["① MySQL 8.0 — dm_centro_psicologico (db:3306)"]
+    direction LR
+    T1["sedes · psicologos · pacientes"]
+    T2["historia_clinica · sesiones"]
+    T3["evaluacion_psicologica · diagnosticos\nplan_intervencion · pagos"]
   end
 
-  subgraph CDC["Kafka Connect — kafka-connect:8083"]
+  subgraph CDC["② Ingesta CDC — Kafka Connect (kafka-connect:8083)"]
     DBZ["mysql-source-connector\nDebezium MySqlConnector\nhost: db:3306 | snapshot: initial"]
     KAFKA[("Kafka 7.5.0 — kafka:9092\ntopics: centro.dm_centro_psicologico.*\ndbhistory.dm_centro_psicologico")]
     SINK["postgres-sink-connector\nJDBC Sink + RegexRouter\nupsert por record_key → schema raw"]
-    DBZ --&gt;|"topic.prefix=centro"| KAFKA
+    DBZ --&gt;|"topic.prefix = centro"| KAFKA
     KAFKA --&gt;|"consume + RegexRouter"| SINK
   end
 
-  subgraph DW["PostgreSQL 15 — dm_centro_psicologico (postgres:5432)"]
+  subgraph DW["③ Data Warehouse — PostgreSQL 15 (postgres:5432)"]
     RAW[("schema: raw\n9 tablas replicadas\nauto.create + auto.evolve")]
     STAGING[("schema: staging\n9 modelos stg_*\ndbt materializa como tabla")]
     DATAMART[("schema: datamart\n6 dims + 3 facts\ndbt materializa como tabla")]
@@ -732,21 +723,25 @@
     STAGING --&gt;|"dbt ref() + SQL joins"| DATAMART
   end
 
-  subgraph BI["Consumo BI"]
-    EXP["dbt exposures\ndashboard_operacional\ndashboard_financiero\ndashboard_clinico\nreporte_pacientes"]
+  subgraph BI["④ Consumo BI"]
+    direction LR
+    EXP["dbt exposures\ndashboard_operacional · dashboard_financiero\ndashboard_clinico · reporte_pacientes"]
     PBI["Power BI\n(archivo .pbix pendiente)"]
     EXP -.-&gt;|"modelo pendiente"| PBI
   end
 
-  OLTP --&gt;|"binlog ROW + Debezium capture"| DBZ
-  SINK --&gt;|"upsert a PostgreSQL"| RAW
+  OLTP    --&gt;|"binlog ROW + Debezium capture"| DBZ
+  SINK    --&gt;|"upsert a PostgreSQL"| RAW
   DATAMART --&gt;|"dbt exposures.yml"| EXP</code></pre>
 <hr />
 <h2 id="infraestructura-docker">Infraestructura Docker<a class="headerlink" href="#infraestructura-docker" title="Permanent link">&para;</a></h2>
 <p>Todos los servicios corren en la red <code>cdc_network</code> definida en <code>docker-compose.yml</code>.</p>
-<pre class="mermaid"><code>flowchart TB
+<pre class="mermaid"><code>flowchart TD
   subgraph COMPOSE["docker-compose.yml — cdc_network (bridge)"]
+    DB["db\nMySQL 8.0\n:3306\nbinlog ROW habilitado"]
+
     subgraph KAFKA_CLUSTER["Cluster Kafka (Confluent 7.5.0)"]
+      direction LR
       ZK["zookeeper\n:2181"]
       KF["kafka\n:9092"]
       ZK --&gt;|coordinacion| KF
@@ -758,32 +753,31 @@
       CI --&gt;|"POST /connectors"| KC
     end
 
-    DB["db\nMySQL 8.0\n:3306\nbinlog ROW habilitado"]
     PG["postgres\nPostgreSQL 15\n:5432"]
-    DBT_SVC["dbt\ndbt run\nestaging + datamart"]
+    DBT_SVC["dbt\ndbt run\nstaging + datamart"]
 
     subgraph MONITOREO["Interfaces Web"]
+      direction LR
       KUI["kafka-ui\n:8080"]
       PGADMIN["pgadmin\n:5050"]
     end
   end
 
-  DB --&gt;|"binlog ROW"| KC
-  KF &lt;--&gt;|"broker"| KC
-  KC --&gt;|"JDBC Sink upsert"| PG
-  PG --&gt;|"lee schema raw.*"| DBT_SVC
-  DBT_SVC --&gt;|"escribe staging.* y datamart.*"| PG
-  KUI -.-&gt;|"monitorea topics"| KF
-  KUI -.-&gt;|"monitorea conectores"| KC
-  PGADMIN -.-&gt;|"administra"| PG</code></pre>
+  DB          --&gt;|"binlog ROW"| KC
+  KF          &lt;--&gt;|"broker"| KC
+  KC          --&gt;|"JDBC Sink upsert"| PG
+  PG          --&gt;|"lee schema raw.*"| DBT_SVC
+  DBT_SVC     --&gt;|"escribe staging.* y datamart.*"| PG
+  KUI         -.-&gt;|"monitorea topics"| KF
+  KUI         -.-&gt;|"monitorea conectores"| KC
+  PGADMIN     -.-&gt;|"administra"| PG</code></pre>
 <hr />
 <h2 id="notas-de-revision">Notas de revision<a class="headerlink" href="#notas-de-revision" title="Permanent link">&para;</a></h2>
 <ul>
-<li>El compose principal (<code>docker-compose.yml</code>) monta <code>./init.sql</code> en MySQL; ese DDL crea las tablas <code>sedes</code>, <code>psicologos</code>, <code>pacientes</code>, <code>historia_clinica</code>, <code>sesiones</code>, <code>evaluacion_psicologica</code>, <code>diagnosticos</code>, <code>plan_intervencion</code> y <code>pagos</code>.</li>
-<li>Existe <code>OLTP_Centro_Psicologico.sql</code> con un esquema anterior <code>oltp_*</code> de 4 tablas que <strong>no</strong> es el DDL cargado por el <code>docker-compose.yml</code> principal.</li>
-<li>Los topics individuales no estan enumerados en el JSON del conector; se infieren de <code>topic.prefix=centro</code>, <code>database.include.list=dm_centro_psicologico</code> y el patron del sink <code>centro\.dm_centro_psicologico\..*</code>.</li>
-<li>No se encontro archivo Power BI (<code>.pbix</code>, <code>.pbit</code>, <code>.pbip</code>, <code>.bim</code>, <code>.dax</code>). Solo existen <code>exposures.yml</code>, <code>metrics.yml</code> y <code>semantic_models.yml</code> que documentan el consumo analitico esperado.</li>
-<li>El servicio <code>connector-init</code> ejecuta <code>scripts/register-connectors.sh</code> para registrar automaticamente los dos conectores JSON al inicio del stack.</li>
+<li>El compose principal monta <code>./init.sql</code> en MySQL; ese DDL crea las 9 tablas del sistema OLTP.</li>
+<li>Los topics individuales se infieren de <code>topic.prefix=centro</code>, <code>database.include.list=dm_centro_psicologico</code> y el patron del sink <code>centro\.dm_centro_psicologico\..*</code>.</li>
+<li>No se encontro archivo Power BI (<code>.pbix</code>, <code>.pbit</code>, <code>.pbip</code>). Solo existen <code>exposures.yml</code>, <code>metrics.yml</code> y <code>semantic_models.yml</code>.</li>
+<li>El servicio <code>connector-init</code> ejecuta <code>scripts/register-connectors.sh</code> para registrar los dos conectores JSON al inicio del stack.</li>
 </ul>
 
 

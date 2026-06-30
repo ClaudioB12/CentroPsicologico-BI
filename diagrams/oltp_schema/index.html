@@ -538,9 +538,18 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#diagrama-er" class="md-nav__link">
+  <a href="#diagrama-er-jerarquia-principal" class="md-nav__link">
     <span class="md-ellipsis">
-      Diagrama ER
+      Diagrama ER — Jerarquia principal
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#diagrama-er-tablas-dependientes-de-sesion" class="md-nav__link">
+    <span class="md-ellipsis">
+      Diagrama ER — Tablas dependientes de sesion
     </span>
   </a>
   
@@ -550,15 +559,6 @@
   <a href="#descripcion-de-tablas" class="md-nav__link">
     <span class="md-ellipsis">
       Descripcion de tablas
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#notas-del-esquema" class="md-nav__link">
-    <span class="md-ellipsis">
-      Notas del esquema
     </span>
   </a>
   
@@ -652,9 +652,18 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#diagrama-er" class="md-nav__link">
+  <a href="#diagrama-er-jerarquia-principal" class="md-nav__link">
     <span class="md-ellipsis">
-      Diagrama ER
+      Diagrama ER — Jerarquia principal
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#diagrama-er-tablas-dependientes-de-sesion" class="md-nav__link">
+    <span class="md-ellipsis">
+      Diagrama ER — Tablas dependientes de sesion
     </span>
   </a>
   
@@ -664,15 +673,6 @@
   <a href="#descripcion-de-tablas" class="md-nav__link">
     <span class="md-ellipsis">
       Descripcion de tablas
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#notas-del-esquema" class="md-nav__link">
-    <span class="md-ellipsis">
-      Notas del esquema
     </span>
   </a>
   
@@ -699,17 +699,14 @@
 
 <h1 id="esquema-oltp-mysql">Esquema OLTP MySQL<a class="headerlink" href="#esquema-oltp-mysql" title="Permanent link">&para;</a></h1>
 <p>Diagrama entidad-relacion del esquema operacional <code>dm_centro_psicologico</code> definido en <code>init.sql</code> y montado por el <code>docker-compose.yml</code> principal.</p>
-<h2 id="diagrama-er">Diagrama ER<a class="headerlink" href="#diagrama-er" title="Permanent link">&para;</a></h2>
-<pre class="mermaid"><code>erDiagram
+<h2 id="diagrama-er-jerarquia-principal">Diagrama ER — Jerarquia principal<a class="headerlink" href="#diagrama-er-jerarquia-principal" title="Permanent link">&para;</a></h2>
+<pre class="mermaid"><code>%%{init: {"er": {"layoutDirection": "TB"}}}%%
+erDiagram
   sedes ||--o{ psicologos : "sede_id"
   sedes ||--o{ pacientes : "sede_id"
   pacientes ||--o{ historia_clinica : "paciente_id"
   historia_clinica ||--o{ sesiones : "historia_id"
   psicologos ||--o{ sesiones : "psicologo_id"
-  sesiones ||--o| evaluacion_psicologica : "sesion_id (UNIQUE)"
-  sesiones ||--o{ diagnosticos : "sesion_id"
-  sesiones ||--o{ plan_intervencion : "sesion_id"
-  sesiones ||--o{ pagos : "sesion_id"
 
   sedes {
     INT sede_id PK
@@ -734,17 +731,12 @@
     INT paciente_id PK
     INT sede_id FK
     VARCHAR nombres
-    VARCHAR apellido_paterno
-    VARCHAR apellido_materno
     ENUM tipo_documento
     VARCHAR numero_documento
     DATE fecha_nacimiento
     ENUM sexo
     VARCHAR estado_civil
-    VARCHAR grado_instruccion
     VARCHAR ocupacion
-    VARCHAR celular
-    VARCHAR email
     DATE fecha_registro
     VARCHAR canal_captacion
     ENUM estado_paciente
@@ -757,7 +749,6 @@
     VARCHAR codigo_historia
     ENUM tipo_historial
     DATE fecha_apertura
-    TEXT observaciones_generales
     ENUM estado_historia
   }
 
@@ -771,8 +762,20 @@
     VARCHAR etapa_atencion
     ENUM modalidad
     SMALLINT duracion_min
-    VARCHAR motivo_consulta
-    TEXT observaciones
+    ENUM estado_sesion
+  }</code></pre>
+<h2 id="diagrama-er-tablas-dependientes-de-sesion">Diagrama ER — Tablas dependientes de sesion<a class="headerlink" href="#diagrama-er-tablas-dependientes-de-sesion" title="Permanent link">&para;</a></h2>
+<pre class="mermaid"><code>%%{init: {"er": {"layoutDirection": "TB"}}}%%
+erDiagram
+  sesiones ||--o| evaluacion_psicologica : "sesion_id UNIQUE"
+  sesiones ||--o{ diagnosticos : "sesion_id"
+  sesiones ||--o{ plan_intervencion : "sesion_id"
+  sesiones ||--o{ pagos : "sesion_id"
+
+  sesiones {
+    INT sesion_id PK
+    DATE fecha_sesion
+    VARCHAR etapa_atencion
     ENUM estado_sesion
   }
 
@@ -780,10 +783,8 @@
     INT evaluacion_id PK
     INT sesion_id FK
     TEXT metodos_aplicados
-    TEXT resultados
     DECIMAL puntaje_cdi
     DECIMAL puntaje_stai
-    TEXT observaciones
     DATE fecha_evaluacion
   }
 
@@ -793,7 +794,6 @@
     VARCHAR codigo_cie10
     VARCHAR descripcion_cie10
     TEXT diagnostico_clinico
-    TEXT observaciones
   }
 
   plan_intervencion {
@@ -801,7 +801,6 @@
     INT sesion_id FK
     TEXT objetivos
     TEXT intervenciones
-    TEXT recomendaciones
     DATE fecha_inicio
     DATE fecha_fin
     ENUM estado_plan
@@ -815,7 +814,6 @@
     VARCHAR comprobante
     ENUM metodo_pago
     ENUM estado_pago
-    TEXT observaciones
   }</code></pre>
 <hr />
 <h2 id="descripcion-de-tablas">Descripcion de tablas<a class="headerlink" href="#descripcion-de-tablas" title="Permanent link">&para;</a></h2>
@@ -857,46 +855,45 @@
 <td><code>sesiones</code></td>
 <td>Citas individuales o de pareja</td>
 <td><code>sesion_id</code></td>
-<td><code>historia_id → historia_clinica</code>, <code>psicologo_id → psicologos</code></td>
+<td><code>historia_id</code>, <code>psicologo_id</code></td>
 </tr>
 <tr>
 <td><code>evaluacion_psicologica</code></td>
 <td>Resultados de pruebas aplicadas (1:1 con sesion)</td>
 <td><code>evaluacion_id</code></td>
-<td><code>sesion_id → sesiones</code> (UNIQUE)</td>
+<td><code>sesion_id</code> (UNIQUE)</td>
 </tr>
 <tr>
 <td><code>diagnosticos</code></td>
 <td>Codigos CIE-10 asociados a sesiones</td>
 <td><code>diagnostico_id</code></td>
-<td><code>sesion_id → sesiones</code></td>
+<td><code>sesion_id</code></td>
 </tr>
 <tr>
 <td><code>plan_intervencion</code></td>
 <td>Objetivos y tecnicas de tratamiento</td>
 <td><code>plan_id</code></td>
-<td><code>sesion_id → sesiones</code></td>
+<td><code>sesion_id</code></td>
 </tr>
 <tr>
 <td><code>pagos</code></td>
 <td>Transacciones economicas por sesion</td>
 <td><code>pago_id</code></td>
-<td><code>sesion_id → sesiones</code></td>
+<td><code>sesion_id</code></td>
 </tr>
 </tbody>
 </table>
-<h2 id="notas-del-esquema">Notas del esquema<a class="headerlink" href="#notas-del-esquema" title="Permanent link">&para;</a></h2>
-<div class="admonition note">
-<p class="admonition-title">Etapas de atencion</p>
-<p>El campo <code>etapa_atencion</code> en <code>sesiones</code> clasifica cada sesion como <code>MOTIVO_CONSULTA</code>, <code>ANAMNESIS</code>, <code>EVALUACION</code>, <code>TRATAMIENTO</code>, <code>SEGUIMIENTO</code> o <code>CIERRE</code>. Los datos de muestra de <code>init.sql</code> solo insertan <code>evaluacion_psicologica</code> para sesiones con <code>etapa_atencion = 'EVALUACION'</code> y <code>plan_intervencion</code> para sesiones con <code>etapa_atencion = 'TRATAMIENTO'</code>.</p>
-</div>
 <div class="admonition warning">
 <p class="admonition-title">Relacion evaluacion_psicologica</p>
-<p><code>evaluacion_psicologica.sesion_id</code> tiene restriccion <code>UNIQUE</code>, por lo que la relacion es 1:0..1 (una sesion puede tener a lo sumo una evaluacion). En el diagrama se representa como <code>||--o|</code>.</p>
+<p><code>evaluacion_psicologica.sesion_id</code> tiene restriccion <code>UNIQUE</code>, por lo que la relacion es 1:0..1 (una sesion puede tener a lo sumo una evaluacion). Solo se inserta para sesiones con <code>etapa_atencion = 'EVALUACION'</code>.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Etapas de atencion</p>
+<p>El campo <code>etapa_atencion</code> en <code>sesiones</code> clasifica cada cita: <code>MOTIVO_CONSULTA</code>, <code>ANAMNESIS</code>, <code>EVALUACION</code>, <code>TRATAMIENTO</code>, <code>SEGUIMIENTO</code> o <code>CIERRE</code>. Los planes de intervencion solo se crean para sesiones <code>TRATAMIENTO REALIZADA</code>.</p>
 </div>
 <div class="admonition info">
-<p class="admonition-title">Diferencia con OLTP_Centro_Psicologico.sql</p>
-<p>El archivo <code>OLTP_Centro_Psicologico.sql</code> contiene un esquema anterior con tablas prefijadas <code>oltp_*</code> (4 tablas). <strong>No es el DDL montado por el <code>docker-compose.yml</code> principal.</strong> El esquema activo es el descrito en esta pagina.</p>
+<p class="admonition-title">Esquema anterior</p>
+<p>El archivo <code>OLTP_Centro_Psicologico.sql</code> contiene un esquema anterior con tablas prefijadas <code>oltp_*</code>. <strong>No es el DDL activo</strong>. El compose principal monta <code>init.sql</code>.</p>
 </div>
 
 

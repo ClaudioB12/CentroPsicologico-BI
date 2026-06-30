@@ -561,9 +561,18 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#diagrama-er" class="md-nav__link">
+  <a href="#esquema-estrella-facts-y-dimensiones-conformadas" class="md-nav__link">
     <span class="md-ellipsis">
-      Diagrama ER
+      Esquema estrella — Facts y dimensiones conformadas
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#dimension-independiente" class="md-nav__link">
+    <span class="md-ellipsis">
+      Dimension independiente
     </span>
   </a>
   
@@ -579,9 +588,9 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#esquema-estrella" class="md-nav__link">
+  <a href="#resumen-del-esquema-estrella" class="md-nav__link">
     <span class="md-ellipsis">
-      Esquema estrella
+      Resumen del esquema estrella
     </span>
   </a>
   
@@ -652,9 +661,18 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#diagrama-er" class="md-nav__link">
+  <a href="#esquema-estrella-facts-y-dimensiones-conformadas" class="md-nav__link">
     <span class="md-ellipsis">
-      Diagrama ER
+      Esquema estrella — Facts y dimensiones conformadas
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#dimension-independiente" class="md-nav__link">
+    <span class="md-ellipsis">
+      Dimension independiente
     </span>
   </a>
   
@@ -670,9 +688,9 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#esquema-estrella" class="md-nav__link">
+  <a href="#resumen-del-esquema-estrella" class="md-nav__link">
     <span class="md-ellipsis">
-      Esquema estrella
+      Resumen del esquema estrella
     </span>
   </a>
   
@@ -699,24 +717,21 @@
 
 <h1 id="modelo-dimensional">Modelo dimensional<a class="headerlink" href="#modelo-dimensional" title="Permanent link">&para;</a></h1>
 <p>Diagrama entidad-relacion del datamart construido por dbt en el schema <code>datamart</code> de PostgreSQL.</p>
-<h2 id="diagrama-er">Diagrama ER<a class="headerlink" href="#diagrama-er" title="Permanent link">&para;</a></h2>
-<pre class="mermaid"><code>erDiagram
+<h2 id="esquema-estrella-facts-y-dimensiones-conformadas">Esquema estrella — Facts y dimensiones conformadas<a class="headerlink" href="#esquema-estrella-facts-y-dimensiones-conformadas" title="Permanent link">&para;</a></h2>
+<pre class="mermaid"><code>%%{init: {"er": {"layoutDirection": "TB"}}}%%
+erDiagram
   DIM_PACIENTE ||--o{ FACT_SESION : "paciente_id"
   DIM_PACIENTE ||--o{ FACT_FACTURACION : "paciente_id"
   DIM_PACIENTE ||--o{ FACT_EVALUACION : "paciente_id"
-
   DIM_PSICOLOGO ||--o{ FACT_SESION : "psicologo_id"
   DIM_PSICOLOGO ||--o{ FACT_FACTURACION : "psicologo_id"
   DIM_PSICOLOGO ||--o{ FACT_EVALUACION : "psicologo_id"
-
   DIM_SEDE ||--o{ FACT_SESION : "sede_id"
   DIM_SEDE ||--o{ FACT_FACTURACION : "sede_id"
-
   DIM_TIEMPO ||--o{ FACT_SESION : "fecha_sesion"
   DIM_TIEMPO ||--o{ FACT_FACTURACION : "fecha_pago"
   DIM_TIEMPO ||--o{ FACT_EVALUACION : "fecha_evaluacion"
-
-  DIM_SERVICIO ||--o{ FACT_SESION : "etapa + tipo_historial + modalidad"
+  DIM_SERVICIO ||--o{ FACT_SESION : "etapa+historial+modalidad"
 
   DIM_PACIENTE {
     INT paciente_id PK
@@ -725,7 +740,6 @@
     VARCHAR rango_etario
     VARCHAR sexo
     VARCHAR estado_civil
-    VARCHAR grado_instruccion
     VARCHAR ocupacion_grupo
     VARCHAR canal_captacion
     VARCHAR estado_paciente
@@ -735,7 +749,6 @@
 
   DIM_PSICOLOGO {
     INT psicologo_id PK
-    VARCHAR dni
     VARCHAR nombres
     VARCHAR especialidad
     VARCHAR cpp
@@ -757,12 +770,10 @@
     INT anio
     INT semestre
     INT trimestre
-    VARCHAR trim_desc
     INT mes
     VARCHAR mes_desc
     INT semana_anio
     INT dia_mes
-    INT dia_semana
     VARCHAR dia_semana_desc
     BOOLEAN es_fin_semana
   }
@@ -776,11 +787,6 @@
     VARCHAR descripcion
   }
 
-  DIM_DIAGNOSTICO {
-    VARCHAR codigo_cie10 PK
-    VARCHAR descripcion_cie10
-  }
-
   FACT_SESION {
     INT sesion_id PK
     DATE fecha_sesion FK
@@ -789,7 +795,6 @@
     INT sede_id FK
     INT historia_id
     INT nro_sesion
-    VARCHAR tipo_historial
     VARCHAR etapa_atencion
     VARCHAR modalidad
     INT duracion_min
@@ -810,16 +815,13 @@
     DECIMAL monto_cobrado
     VARCHAR metodo_pago
     VARCHAR estado_pago
-    VARCHAR comprobante
   }
 
   FACT_EVALUACION {
     INT evaluacion_id PK
     INT sesion_id FK
-    DATE fecha_sesion
     INT paciente_id FK
     INT psicologo_id FK
-    INT historia_id
     DECIMAL puntaje_cdi
     DECIMAL puntaje_stai
     VARCHAR nivel_depresion
@@ -827,32 +829,88 @@
     VARCHAR metodos_aplicados
     DATE fecha_evaluacion FK
   }</code></pre>
+<h2 id="dimension-independiente">Dimension independiente<a class="headerlink" href="#dimension-independiente" title="Permanent link">&para;</a></h2>
+<pre class="mermaid"><code>%%{init: {"er": {"layoutDirection": "TB"}}}%%
+erDiagram
+  DIM_DIAGNOSTICO {
+    VARCHAR codigo_cie10 PK
+    VARCHAR descripcion_cie10
+  }</code></pre>
+<div class="admonition warning">
+<p class="admonition-title">DIM_DIAGNOSTICO sin FK en hechos</p>
+<p><code>dim_diagnostico</code> existe en el datamart pero ninguna de las tres facts contiene <code>codigo_cie10</code> ni <code>diagnostico_id</code>. Para vincularlo habria que agregar esa FK a <code>fact_sesion</code> en los modelos dbt.</p>
+</div>
 <hr />
 <h2 id="notas-de-revision">Notas de revision<a class="headerlink" href="#notas-de-revision" title="Permanent link">&para;</a></h2>
-<div class="admonition warning">
-<p class="admonition-title">DIM_DIAGNOSTICO sin relacion directa con hechos</p>
-<p><code>dim_diagnostico</code> existe en el datamart y se construye desde <code>stg_diagnosticos</code>, pero ninguna de las tres tablas de hechos (<code>fact_sesion</code>, <code>fact_facturacion</code>, <code>fact_evaluacion</code>) contiene <code>codigo_cie10</code> ni <code>diagnostico_id</code>. Por eso no aparece conectada al esquema estrella. Para vincularla habria que agregar <code>diagnostico_id</code> a <code>fact_sesion</code> en los modelos dbt.</p>
-</div>
 <div class="admonition note">
 <p class="admonition-title">Clave compuesta en DIM_SERVICIO</p>
-<p><code>dim_servicio</code> no tiene una clave surrogate; su relacion con <code>fact_sesion</code> se establece por la combinacion natural de tres columnas: <code>etapa_atencion</code>, <code>tipo_historial</code> y <code>modalidad</code>.</p>
+<p><code>dim_servicio</code> no tiene surrogate key. Su relacion con <code>fact_sesion</code> se establece por la combinacion natural de tres columnas: <code>etapa_atencion + tipo_historial + modalidad</code>.</p>
 </div>
 <div class="admonition info">
 <p class="admonition-title">Dimensiones conformadas</p>
-<p><code>DIM_PACIENTE</code>, <code>DIM_PSICOLOGO</code>, <code>DIM_SEDE</code> y <code>DIM_TIEMPO</code> son dimensiones conformadas: son compartidas por mas de una tabla de hechos, lo que permite analisis cruzado entre sesiones, facturacion y evaluaciones.</p>
+<p><code>DIM_PACIENTE</code>, <code>DIM_PSICOLOGO</code>, <code>DIM_SEDE</code> y <code>DIM_TIEMPO</code> son compartidas por mas de una tabla de hechos, lo que permite analisis cruzado entre sesiones, facturacion y evaluaciones.</p>
 </div>
 <div class="admonition tip">
 <p class="admonition-title">Filtro en FACT_FACTURACION</p>
-<p><code>fact_facturacion</code> solo incluye registros con <code>estado_pago = 'PAGADO'</code>. Los pagos pendientes o exonerados no forman parte del hecho de facturacion.</p>
+<p><code>fact_facturacion</code> solo incluye registros con <code>estado_pago = 'PAGADO'</code>. Los pagos pendientes o exonerados quedan excluidos.</p>
 </div>
-<h2 id="esquema-estrella">Esquema estrella<a class="headerlink" href="#esquema-estrella" title="Permanent link">&para;</a></h2>
-<p>El datamart implementa un esquema estrella extendido:</p>
-<ul>
-<li><strong>3 tablas de hechos</strong>: <code>fact_sesion</code>, <code>fact_facturacion</code>, <code>fact_evaluacion</code></li>
-<li><strong>5 dimensiones conformadas</strong>: <code>dim_paciente</code>, <code>dim_psicologo</code>, <code>dim_sede</code>, <code>dim_tiempo</code>, <code>dim_servicio</code></li>
-<li><strong>1 dimension independiente</strong>: <code>dim_diagnostico</code> (sin FK en hechos actuales)</li>
-<li><strong>1 tabla auxiliar MetricFlow</strong>: <code>time_spine_day</code> (fechas diarias 2020-01-01 a 2030-12-31)</li>
-</ul>
+<h2 id="resumen-del-esquema-estrella">Resumen del esquema estrella<a class="headerlink" href="#resumen-del-esquema-estrella" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Tipo</th>
+<th>Nombre</th>
+<th>Filas (dbt run 2026-05-26)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Hecho</td>
+<td><code>fact_sesion</code></td>
+<td>52</td>
+</tr>
+<tr>
+<td>Hecho</td>
+<td><code>fact_facturacion</code></td>
+<td>45</td>
+</tr>
+<tr>
+<td>Hecho</td>
+<td><code>fact_evaluacion</code></td>
+<td>9</td>
+</tr>
+<tr>
+<td>Dimension</td>
+<td><code>dim_paciente</code></td>
+<td>20</td>
+</tr>
+<tr>
+<td>Dimension</td>
+<td><code>dim_psicologo</code></td>
+<td>4</td>
+</tr>
+<tr>
+<td>Dimension</td>
+<td><code>dim_sede</code></td>
+<td>3</td>
+</tr>
+<tr>
+<td>Dimension</td>
+<td><code>dim_tiempo</code></td>
+<td>48 fechas</td>
+</tr>
+<tr>
+<td>Dimension</td>
+<td><code>dim_servicio</code></td>
+<td>22 combinaciones</td>
+</tr>
+<tr>
+<td>Dimension</td>
+<td><code>dim_diagnostico</code></td>
+<td>10 codigos CIE-10</td>
+</tr>
+</tbody>
+</table>
 
 
 

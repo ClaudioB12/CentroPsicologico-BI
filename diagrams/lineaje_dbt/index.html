@@ -515,9 +515,27 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#dependencias-entre-modelos" class="md-nav__link">
+  <a href="#linaje-raw-staging" class="md-nav__link">
     <span class="md-ellipsis">
-      Dependencias entre modelos
+      Linaje: raw → staging
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#linaje-staging-dimensiones" class="md-nav__link">
+    <span class="md-ellipsis">
+      Linaje: staging → dimensiones
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#linaje-staging-hechos" class="md-nav__link">
+    <span class="md-ellipsis">
+      Linaje: staging → hechos
     </span>
   </a>
   
@@ -652,9 +670,27 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#dependencias-entre-modelos" class="md-nav__link">
+  <a href="#linaje-raw-staging" class="md-nav__link">
     <span class="md-ellipsis">
-      Dependencias entre modelos
+      Linaje: raw → staging
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#linaje-staging-dimensiones" class="md-nav__link">
+    <span class="md-ellipsis">
+      Linaje: staging → dimensiones
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#linaje-staging-hechos" class="md-nav__link">
+    <span class="md-ellipsis">
+      Linaje: staging → hechos
     </span>
   </a>
   
@@ -698,74 +734,109 @@
 
 
 <h1 id="lineaje-dbt">Lineaje dbt<a class="headerlink" href="#lineaje-dbt" title="Permanent link">&para;</a></h1>
-<p>Muestra las dependencias entre capas de modelos dbt: fuentes <code>raw</code> → <code>staging</code> → dimensiones y hechos del <code>datamart</code>.</p>
-<h2 id="dependencias-entre-modelos">Dependencias entre modelos<a class="headerlink" href="#dependencias-entre-modelos" title="Permanent link">&para;</a></h2>
+<p>Dependencias entre capas de modelos dbt: fuentes <code>raw</code> → <code>staging</code> → dimensiones y hechos del <code>datamart</code>.</p>
+<h2 id="linaje-raw-staging">Linaje: raw → staging<a class="headerlink" href="#linaje-raw-staging" title="Permanent link">&para;</a></h2>
 <pre class="mermaid"><code>flowchart TD
-  subgraph RAW["schema raw — fuentes CDC (PostgreSQL)"]
-    r_sedes([raw.sedes])
-    r_psicologos([raw.psicologos])
-    r_pacientes([raw.pacientes])
-    r_historia([raw.historia_clinica])
-    r_sesiones([raw.sesiones])
-    r_evaluaciones([raw.evaluacion_psicologica])
-    r_diagnosticos([raw.diagnosticos])
-    r_planes([raw.plan_intervencion])
-    r_pagos([raw.pagos])
+  subgraph RAW["schema raw — 9 fuentes CDC"]
+    direction LR
+    r1([raw.sedes]) 
+    r2([raw.psicologos])
+    r3([raw.pacientes])
+    r4([raw.historia_clinica])
+    r5([raw.sesiones])
+    r6([raw.evaluacion_psicologica])
+    r7([raw.diagnosticos])
+    r8([raw.plan_intervencion])
+    r9([raw.pagos])
   end
 
+  subgraph STAGING["schema staging — 9 modelos stg_*"]
+    direction LR
+    s1[stg_sedes]
+    s2[stg_psicologos]
+    s3[stg_pacientes]
+    s4[stg_historia_clinica]
+    s5[stg_sesiones]
+    s6[stg_evaluaciones]
+    s7[stg_diagnosticos]
+    s8[stg_planes]
+    s9[stg_pagos]
+  end
+
+  r1 --&gt; s1
+  r2 --&gt; s2
+  r3 --&gt; s3
+  r4 --&gt; s4
+  r5 --&gt; s5
+  r6 --&gt; s6
+  r7 --&gt; s7
+  r8 --&gt; s8
+  r9 --&gt; s9</code></pre>
+<h2 id="linaje-staging-dimensiones">Linaje: staging → dimensiones<a class="headerlink" href="#linaje-staging-dimensiones" title="Permanent link">&para;</a></h2>
+<pre class="mermaid"><code>flowchart TD
   subgraph STAGING["schema staging"]
-    stg_sedes[stg_sedes]
-    stg_psicologos[stg_psicologos]
-    stg_pacientes[stg_pacientes]
-    stg_historia[stg_historia_clinica]
-    stg_sesiones[stg_sesiones]
-    stg_evaluaciones[stg_evaluaciones]
-    stg_diagnosticos[stg_diagnosticos]
-    stg_planes[stg_planes]
-    stg_pagos[stg_pagos]
+    direction LR
+    s1[stg_sedes]
+    s2[stg_psicologos]
+    s3[stg_pacientes]
+    s4[stg_historia_clinica]
+    s5[stg_sesiones]
+    s7[stg_diagnosticos]
   end
 
   subgraph DIMS["schema datamart — dimensiones"]
-    dim_sede[dim_sede]
-    dim_psicologo[dim_psicologo]
-    dim_paciente[dim_paciente]
-    dim_tiempo[dim_tiempo]
-    dim_servicio[dim_servicio]
-    dim_diagnostico[dim_diagnostico]
+    d1[dim_sede]
+    d2[dim_psicologo]
+    d3[dim_paciente]
+    d4[dim_tiempo]
+    d5[dim_servicio]
+    d6[dim_diagnostico]
+  end
+
+  s1 --&gt; d1
+  s2 --&gt; d2
+  s3 --&gt; d3
+  s4 --&gt; d3
+  s5 --&gt; d4
+  s5 --&gt; d5
+  s4 --&gt; d5
+  s7 --&gt; d6</code></pre>
+<h2 id="linaje-staging-hechos">Linaje: staging → hechos<a class="headerlink" href="#linaje-staging-hechos" title="Permanent link">&para;</a></h2>
+<pre class="mermaid"><code>flowchart TD
+  subgraph STAGING["schema staging"]
+    direction LR
+    s2[stg_psicologos]
+    s4[stg_historia_clinica]
+    s5[stg_sesiones]
+    s6[stg_evaluaciones]
+    s9[stg_pagos]
   end
 
   subgraph FACTS["schema datamart — hechos"]
-    fact_sesion[fact_sesion]
-    fact_facturacion[fact_facturacion]
-    fact_evaluacion[fact_evaluacion]
+    f1[fact_sesion\n52 filas]
+    f2[fact_facturacion\n45 filas]
+    f3[fact_evaluacion\n9 filas]
   end
 
-  r_sedes --&gt; stg_sedes
-  r_psicologos --&gt; stg_psicologos
-  r_pacientes --&gt; stg_pacientes
-  r_historia --&gt; stg_historia
-  r_sesiones --&gt; stg_sesiones
-  r_evaluaciones --&gt; stg_evaluaciones
-  r_diagnosticos --&gt; stg_diagnosticos
-  r_planes --&gt; stg_planes
-  r_pagos --&gt; stg_pagos
+  s5 --&gt; f1
+  s4 --&gt; f1
+  s2 --&gt; f1
 
-  stg_sedes --&gt; dim_sede
-  stg_psicologos --&gt; dim_psicologo
-  stg_pacientes &amp; stg_historia --&gt; dim_paciente
-  stg_sesiones --&gt; dim_tiempo
-  stg_sesiones &amp; stg_historia --&gt; dim_servicio
-  stg_diagnosticos --&gt; dim_diagnostico
+  s9 --&gt; f2
+  s5 --&gt; f2
+  s4 --&gt; f2
+  s2 --&gt; f2
 
-  stg_sesiones &amp; stg_historia &amp; stg_psicologos --&gt; fact_sesion
-  stg_pagos &amp; stg_sesiones &amp; stg_historia &amp; stg_psicologos --&gt; fact_facturacion
-  stg_evaluaciones &amp; stg_sesiones &amp; stg_historia --&gt; fact_evaluacion</code></pre>
+  s6 --&gt; f3
+  s5 --&gt; f3
+  s4 --&gt; f3</code></pre>
 <hr />
 <h2 id="transformaciones-aplicadas-en-staging">Transformaciones aplicadas en staging<a class="headerlink" href="#transformaciones-aplicadas-en-staging" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
 <tr>
 <th>Modelo staging</th>
+<th>Filas</th>
 <th>Fuente raw</th>
 <th>Transformaciones clave</th>
 </tr>
@@ -773,46 +844,55 @@
 <tbody>
 <tr>
 <td><code>stg_sedes</code></td>
+<td>3</td>
 <td><code>raw.sedes</code></td>
-<td>Convierte <code>tiene_online</code> TINYINT a booleano</td>
+<td>Convierte <code>tiene_online</code> TINYINT → booleano</td>
 </tr>
 <tr>
 <td><code>stg_psicologos</code></td>
+<td>4</td>
 <td><code>raw.psicologos</code></td>
 <td>Seleccion directa de columnas</td>
 </tr>
 <tr>
 <td><code>stg_pacientes</code></td>
+<td>20</td>
 <td><code>raw.pacientes</code></td>
-<td>Convierte <code>fecha_nacimiento</code> desde entero Debezium con <code>DATE '1970-01-01' + campo</code></td>
+<td><code>DATE '1970-01-01' + fecha_nacimiento</code> (entero Debezium → DATE)</td>
 </tr>
 <tr>
 <td><code>stg_historia_clinica</code></td>
+<td>20</td>
 <td><code>raw.historia_clinica</code></td>
 <td>Convierte <code>fecha_apertura</code></td>
 </tr>
 <tr>
 <td><code>stg_sesiones</code></td>
+<td>52</td>
 <td><code>raw.sesiones</code></td>
 <td>Convierte <code>fecha_sesion</code>; <code>coalesce(duracion_min, 0)</code></td>
 </tr>
 <tr>
 <td><code>stg_evaluaciones</code></td>
+<td>9</td>
 <td><code>raw.evaluacion_psicologica</code></td>
-<td><code>coalesce</code> en puntajes CDI/STAI; convierte <code>fecha_evaluacion</code></td>
+<td><code>coalesce</code> en CDI/STAI; convierte <code>fecha_evaluacion</code></td>
 </tr>
 <tr>
 <td><code>stg_diagnosticos</code></td>
+<td>31</td>
 <td><code>raw.diagnosticos</code></td>
 <td>Filtra <code>codigo_cie10 IS NOT NULL</code></td>
 </tr>
 <tr>
 <td><code>stg_planes</code></td>
+<td>9</td>
 <td><code>raw.plan_intervencion</code></td>
 <td>Convierte <code>fecha_inicio</code> y <code>fecha_fin</code></td>
 </tr>
 <tr>
 <td><code>stg_pagos</code></td>
+<td>45</td>
 <td><code>raw.pagos</code></td>
 <td>Convierte <code>fecha_pago</code>; <code>coalesce(monto, 0.00)</code></td>
 </tr>
@@ -823,54 +903,54 @@
 <thead>
 <tr>
 <th>Modelo mart</th>
-<th>Tipo</th>
+<th>Filas</th>
 <th>Joins principales</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td><code>dim_paciente</code></td>
-<td>Dimension</td>
-<td><code>stg_pacientes</code> LEFT JOIN <code>stg_historia_clinica</code> por <code>paciente_id</code></td>
+<td>20</td>
+<td><code>stg_pacientes</code> LEFT JOIN <code>stg_historia_clinica</code></td>
 </tr>
 <tr>
 <td><code>dim_psicologo</code></td>
-<td>Dimension</td>
+<td>4</td>
 <td><code>stg_psicologos</code></td>
 </tr>
 <tr>
 <td><code>dim_sede</code></td>
-<td>Dimension</td>
+<td>3</td>
 <td><code>stg_sedes</code></td>
 </tr>
 <tr>
 <td><code>dim_servicio</code></td>
-<td>Dimension</td>
-<td><code>stg_sesiones</code> LEFT JOIN <code>stg_historia_clinica</code> por <code>historia_id</code></td>
+<td>22</td>
+<td><code>stg_sesiones</code> LEFT JOIN <code>stg_historia_clinica</code> — <code>DISTINCT etapa+historial+modalidad</code></td>
 </tr>
 <tr>
 <td><code>dim_tiempo</code></td>
-<td>Dimension</td>
-<td><code>stg_sesiones</code> — genera calendario desde fechas de sesion</td>
+<td>48</td>
+<td><code>stg_sesiones</code> — fechas unicas de sesion</td>
 </tr>
 <tr>
 <td><code>dim_diagnostico</code></td>
-<td>Dimension</td>
+<td>10</td>
 <td><code>stg_diagnosticos</code> — <code>DISTINCT codigo_cie10</code></td>
 </tr>
 <tr>
 <td><code>fact_sesion</code></td>
-<td>Hecho</td>
+<td>52</td>
 <td><code>stg_sesiones</code> + historias + psicologos</td>
 </tr>
 <tr>
 <td><code>fact_facturacion</code></td>
-<td>Hecho</td>
+<td>45</td>
 <td><code>stg_pagos</code> + sesiones + historias + psicologos; filtro <code>estado_pago = 'PAGADO'</code></td>
 </tr>
 <tr>
 <td><code>fact_evaluacion</code></td>
-<td>Hecho</td>
+<td>9</td>
 <td><code>stg_evaluaciones</code> + sesiones + historias</td>
 </tr>
 </tbody>
