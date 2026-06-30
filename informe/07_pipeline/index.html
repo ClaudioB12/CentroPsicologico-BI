@@ -1210,7 +1210,6 @@
 <h2 id="72-capas-de-datos">7.2 Capas de datos<a class="headerlink" href="#72-capas-de-datos" title="Permanent link">&para;</a></h2>
 <pre class="mermaid"><code>flowchart TD
   subgraph BRONZE["Bronze — schema raw"]
-    direction LR
     R1[raw.sedes]
     R2[raw.psicologos]
     R3[raw.pacientes]
@@ -1223,7 +1222,6 @@
   end
 
   subgraph SILVER["Silver — schema staging"]
-    direction LR
     S1[stg_sedes]
     S2[stg_psicologos]
     S3[stg_pacientes]
@@ -1236,7 +1234,6 @@
   end
 
   subgraph GOLD["Gold — schema datamart"]
-    direction LR
     D1[dim_sede]
     D2[dim_psicologo]
     D3[dim_paciente]

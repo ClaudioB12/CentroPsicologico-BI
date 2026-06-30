@@ -1022,83 +1022,62 @@
 
 <h1 id="arquitectura-cdc-y-bi">Arquitectura CDC y BI<a class="headerlink" href="#arquitectura-cdc-y-bi" title="Permanent link">&para;</a></h1>
 <h2 id="pipeline-completo-mysql-kafka-postgresql-dbt-bi">Pipeline completo: MySQL → Kafka → PostgreSQL → dbt → BI<a class="headerlink" href="#pipeline-completo-mysql-kafka-postgresql-dbt-bi" title="Permanent link">&para;</a></h2>
-<pre class="mermaid"><code>flowchart LR
-  subgraph OLTP["MySQL 8.0 — dm_centro_psicologico (db:3306)"]
-    MYSQL[(dm_centro_psicologico)]
-    T_SEDES[sedes]
-    T_PSICOLOGOS[psicologos]
-    T_PACIENTES[pacientes]
-    T_HISTORIA[historia_clinica]
-    T_SESIONES[sesiones]
-    T_EVAL[evaluacion_psicologica]
-    T_DIAG[diagnosticos]
-    T_PLANES[plan_intervencion]
-    T_PAGOS[pagos]
-    MYSQL --&gt; T_SEDES &amp; T_PSICOLOGOS &amp; T_PACIENTES
-    MYSQL --&gt; T_HISTORIA &amp; T_SESIONES
-    MYSQL --&gt; T_EVAL &amp; T_DIAG &amp; T_PLANES &amp; T_PAGOS
+<pre class="mermaid"><code>flowchart TD
+  subgraph CAPA1["① Fuente OLTP — MySQL 8.0  puerto 3306"]
+    T1["sesiones · pagos · evaluacion_psicologica"]
+    T2["pacientes · psicologos · sedes"]
+    T3["historia_clinica · diagnosticos · plan_intervencion"]
   end
 
-  subgraph CDC["Kafka Connect — kafka-connect:8083"]
-    DBZ["mysql-source-connector\nDebezium MySqlConnector\nhost: db:3306 | snapshot: initial"]
-    KAFKA[("Kafka 7.5.0 — kafka:9092\ntopics: centro.dm_centro_psicologico.*\ndbhistory.dm_centro_psicologico")]
-    SINK["postgres-sink-connector\nJDBC Sink + RegexRouter\nupsert por record_key → schema raw"]
+  subgraph CAPA2["② Ingesta CDC — Debezium + Apache Kafka"]
+    DBZ["mysql-source-connector\nDebezium MySqlConnector 2.4.2\nhost: db:3306  |  snapshot: initial"]
+    KAFKA[("Kafka 7.5.0  puerto 9092\ntopics: centro.dm_centro_psicologico.*")]
+    SINK["postgres-sink-connector\nJDBC Sink 10.9.3 + RegexRouter\nupsert por record_key → schema raw"]
     DBZ --&gt;|"topic.prefix=centro"| KAFKA
     KAFKA --&gt;|"consume + RegexRouter"| SINK
   end
 
-  subgraph DW["PostgreSQL 15 — dm_centro_psicologico (postgres:5432)"]
+  subgraph CAPA3["③ Data Warehouse — PostgreSQL 15  puerto 5432"]
     RAW[("schema: raw\n9 tablas replicadas\nauto.create + auto.evolve")]
-    STAGING[("schema: staging\n9 modelos stg_*\ndbt materializa como tabla")]
-    DATAMART[("schema: datamart\n6 dims + 3 facts\ndbt materializa como tabla")]
-    RAW --&gt;|"dbt source('raw', ...)"| STAGING
+    STAGING[("schema: staging\n9 modelos stg_* + 1 int_ephemeral\ndbt materializa como tabla")]
+    DATAMART[("schema: datamart\n6 dimensiones + 3 hechos\ndbt materializa como tabla")]
+    RAW --&gt;|"dbt source refs"| STAGING
     STAGING --&gt;|"dbt ref() + SQL joins"| DATAMART
   end
 
-  subgraph BI["Consumo BI"]
-    EXP["dbt exposures\ndashboard_operacional\ndashboard_financiero\ndashboard_clinico\nreporte_pacientes"]
-    PBI["Power BI\n(archivo .pbix pendiente)"]
-    EXP -.-&gt;|"modelo pendiente"| PBI
+  subgraph CAPA4["④ Business Intelligence — Power BI Desktop"]
+    PBI["Power BI Import Mode\nconexion localhost:5432 → schema datamart\n13 KPIs  ·  3 tableros  ·  4 jerarquias"]
   end
 
-  OLTP --&gt;|"binlog ROW + Debezium capture"| DBZ
-  SINK --&gt;|"upsert a PostgreSQL"| RAW
-  DATAMART --&gt;|"dbt exposures.yml"| EXP</code></pre>
+  CAPA1    --&gt;|"binlog ROW capturado por Debezium"| DBZ
+  SINK     --&gt;|"upsert a PostgreSQL schema raw"| RAW
+  DATAMART --&gt;|"conexion directa Import Mode"| PBI</code></pre>
 <hr />
 <h2 id="infraestructura-docker">Infraestructura Docker<a class="headerlink" href="#infraestructura-docker" title="Permanent link">&para;</a></h2>
 <p>Todos los servicios corren en la red <code>cdc_network</code> definida en <code>docker-compose.yml</code>.</p>
-<pre class="mermaid"><code>flowchart TB
-  subgraph COMPOSE["docker-compose.yml — cdc_network (bridge)"]
-    subgraph KAFKA_CLUSTER["Cluster Kafka (Confluent 7.5.0)"]
-      ZK["zookeeper\n:2181"]
-      KF["kafka\n:9092"]
-      ZK --&gt;|coordinacion| KF
-    end
-
-    subgraph CONNECT["Kafka Connect"]
-      KC["kafka-connect\n:8083\nDebezium MySQL 2.4.2\nJDBC Sink 10.9.3\nPG JDBC 42.7.4"]
-      CI["connector-init\nregistra conectores via\nREST POST /connectors"]
-      CI --&gt;|"POST /connectors"| KC
-    end
-
-    DB["db\nMySQL 8.0\n:3306\nbinlog ROW habilitado"]
-    PG["postgres\nPostgreSQL 15\n:5432"]
+<pre class="mermaid"><code>flowchart TD
+  subgraph COMPOSE["docker-compose.yml — red cdc_network bridge"]
+    DB["db\nMySQL 8.0  ·  puerto 3306\nbinlog ROW habilitado"]
+    ZK["zookeeper\npuerto 2181"]
+    KF["kafka\npuerto 9092"]
+    KC["kafka-connect  ·  puerto 8083\nDebezium MySqlConnector 2.4.2\nJDBC Sink 10.9.3  ·  PG JDBC 42.7.4"]
+    CI["connector-init\nregistra conectores al inicio\nvia REST POST /connectors"]
+    PG["postgres\nPostgreSQL 15  ·  puerto 5432"]
     DBT_SVC["dbt\ndbt run\nestaging + datamart"]
-
-    subgraph MONITOREO["Interfaces Web"]
-      KUI["kafka-ui\n:8080"]
-      PGADMIN["pgadmin\n:5050"]
-    end
+    KUI["kafka-ui\npuerto 8080"]
+    PGADMIN["pgadmin\npuerto 5050"]
   end
 
-  DB --&gt;|"binlog ROW"| KC
-  KF &lt;--&gt;|"broker"| KC
-  KC --&gt;|"JDBC Sink upsert"| PG
-  PG --&gt;|"lee schema raw.*"| DBT_SVC
-  DBT_SVC --&gt;|"escribe staging.* y datamart.*"| PG
-  KUI -.-&gt;|"monitorea topics"| KF
-  KUI -.-&gt;|"monitorea conectores"| KC
-  PGADMIN -.-&gt;|"administra"| PG</code></pre>
+  ZK       --&gt;|"coordinacion de cluster"| KF
+  CI       --&gt;|"POST /connectors"| KC
+  DB       --&gt;|"binlog ROW"| KC
+  KF      &lt;--&gt;|"broker de mensajes"| KC
+  KC       --&gt;|"JDBC Sink upsert"| PG
+  PG       --&gt;|"lee schema raw.*"| DBT_SVC
+  DBT_SVC  --&gt;|"escribe staging.* y datamart.*"| PG
+  KUI     -.-&gt;|"monitorea topics"| KF
+  KUI     -.-&gt;|"monitorea conectores"| KC
+  PGADMIN -.-&gt;|"administra bases de datos"| PG</code></pre>
 <hr />
 <h2 id="notas-de-revision">Notas de revision<a class="headerlink" href="#notas-de-revision" title="Permanent link">&para;</a></h2>
 <ul>
